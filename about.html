@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Attendance Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #2a9d8f;
+            --accent-dark: #21867a;
+            --card-bg: #ffffffd9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            color: #555;
+        }
+
+        .image-section {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .image-placeholder {
+            background: var(--card-bg);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            display: inline-block;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 5px;
+            max-width: 300px;
+        }
+
+        .image-placeholder:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-placeholder img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .nav-home {
+            display: inline-block;
+            margin: 30px 0;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-home:hover {
+            background: var(--accent-dark);
+        }
+
+        @media (max-width: 768px) {
+            .image-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 1.1rem;
+                margin-bottom: 30px;
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance Tracker</h1>
+        
+        <p class="description">
+            A simple and efficient attendance tracking system for schools and organizations. 
+            Track attendance, mark present/absent, and view attendance summaries all in one place.
+        </p>
+
+        <div class="image-section">
+            <div class="image-placeholder">
+                <img src="vansh.jpg" alt="Team Member - Vansh">
+                <p>Vansh Mayekar 23CE174</p>
+            </div>
+            <div class="image-placeholder">
+                <img src="rohit.jpg" alt="Team Member - Rohit">
+                <p>Rohit Ghorpade 23CE152</p>
+            </div>
+        </div>
+
+        <p class="description">
+            Built with HTML & CSS for a fast and reliable user experience.<br />
+            <strong>&copy; Team Alt+Ctrl+Delete</strong>
+        </p>
+
+        <a href="homepage.html" class="nav-home">← Back to Home</a>
+    </div>
+</body>
+
+</html>
