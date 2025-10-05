@@ -2,148 +2,200 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Attendance Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #fdfaf6;
-            --text: #1e1e1e;
-            --accent: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffffd9;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Attendance Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fdfaf6;
+      --text: #1e1e1e;
+      --accent: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffffd9;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-        }
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
 
-        .container {
-            max-width: 800px;
-            text-align: center;
-        }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
 
-        .description {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            margin-bottom: 40px;
-            color: #555;
-        }
+    h1 {
+      font-size: 2.2rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
 
-        .image-section {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 40px 0;
-            flex-wrap: wrap;
-        }
+    .description {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #555;
+    }
 
-        .image-placeholder {
-            background: var(--card-bg);
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            display: inline-block;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            padding: 5px;
-            max-width: 300px;
-        }
+    .image-section {
+      display: flex;
+      justify-content: center;
+      gap: 5.0rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-        .image-placeholder:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
+    .image-card {
+      background: var(--card-bg);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      flex: 1 1 150px;
+      max-width: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        .image-placeholder img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            display: block;
-        }
+    .image-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
 
-        .nav-home {
-            display: inline-block;
-            margin: 30px 0;
-            padding: 12px 24px;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
+    .image-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      object-position: center; /* default: centered */
+      border-bottom: 1px solid #ddd;
+    }
 
-        .nav-home:hover {
-            background: var(--accent-dark);
-        }
+    /* Rohit image crops from bottom */
+    .image-card.rohit img {
+      object-position: top; /* top visible, crop from bottom */
+    }
 
-        @media (max-width: 768px) {
-            .image-section {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+    .image-card p {
+      margin: 0.5rem 0;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #f7f7f7;
+      padding: 0.5rem 0;
+    }
 
-            h1 {
-                font-size: 2rem;
-            }
+    .nav-home {
+      display: inline-block;
+      padding: 0.6rem 2rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
 
-            .description {
-                font-size: 1.1rem;
-                margin-bottom: 30px;
-                color: black;
-            }
-        }
-    </style>
+    .nav-home:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .description {
+        font-size: 0.95rem;
+      }
+
+      .image-card {
+        max-width: 150px;
+      }
+
+      .image-card p {
+        font-size: 0.85rem;
+      }
+
+      .nav-home {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.5rem;
+      }
+
+      footer {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Attendance Tracker</h1>
-        
-        <p class="description">
-            A simple and efficient attendance tracking system for schools and organizations. 
-            Track attendance, mark present/absent, and view attendance summaries all in one place.
-        </p>
+  <div class="container">
+    <h1>Student Attendance Tracker</h1>
 
-        <div class="image-section">
-            <div class="image-placeholder">
-                <img src="vansh.jpg" alt="Team Member - Vansh">
-                <p>Vansh Mayekar 23CE174</p>
-            </div>
-            <div class="image-placeholder">
-                <img src="rohit.jpg" alt="Team Member - Rohit">
-                <p>Rohit Ghorpade 23CE152</p>
-            </div>
-        </div>
+    <p class="description">
+      A simple and efficient attendance tracking system for schools and organizations.
+      Track attendance, mark present/absent, and view attendance summaries all in one place.
+    </p>
 
-        <p class="description">
-            Built with HTML & CSS for a fast and reliable user experience.<br />
-            <strong>&copy; Team Alt+Ctrl+Delete</strong>
-        </p>
-
-        <a href="homepage.html" class="nav-home">← Back to Home</a>
+    <div class="image-section">
+      <div class="image-card">
+        <img src="vansh.jpg" alt="Team Member - Vansh">
+        <p>Vansh Mayekar<br>23CE174</p>
+      </div>
+      <div class="image-card rohit">
+        <img src="rohit.jpg" alt="Team Member - Rohit">
+        <p>Rohit Ghorpade<br>23CE152</p>
+      </div>
     </div>
+
+    <p class="description">
+      Built with HTML & CSS for a fast and reliable user experience.
+    </p>
+
+    <a href="homepage.html" class="nav-home">🏠 Home</a>
+  </div>
+
+  <footer>
+    &copy; 2025 Attendance Portal — A Web Technology Project
+  </footer>
 </body>
 
 </html>
