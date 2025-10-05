@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Last 10 Days Attendance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fdfaf6;
+      --text: #1e1e1e;
+      --accent: #457b9d; /* Blue-ish for summary */
+      --accent-dark: #1d4e70;
+      --header-bg: #2c3e50;
+      --card-bg: #ffffffd9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 25px 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-home {
+      display: inline-block;
+      margin: 30px 0 40px 0;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+    }
+
+    .nav-home:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    table {
+      width: 90%;
+      max-width: 900px;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    table:hover { transform: scale(1.01); }
+
+    th, td { padding: 16px; text-align: center; border-bottom: 1px solid #eee; font-size: 1rem; }
+    th { background: var(--accent); color: #fff; font-size: 1.1rem; letter-spacing: 0.5px; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: #f7f3ed; }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #8b6e5f;
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      header { font-size: 2rem; }
+      .nav-home { font-size: 0.95rem; padding: 10px 20px; }
+      table { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>📊 Last 10 Days Attendance</header>
+
+  <a class="nav-home" href="homepage.html">🏠 Home</a>
+
+  <table>
+    <tr><th>Name</th><th>Days Present</th><th>Days Absent</th></tr>
+    <tr><td>Vansh Mayekar</td><td>9</td><td>1</td></tr>
+    <tr><td>Riya Sharma</td><td>8</td><td>2</td></tr>
+    <tr><td>Aditya Singh</td><td>10</td><td>0</td></tr>
+    <tr><td>Priya Patel</td><td>7</td><td>3</td></tr>
+  </table>
+
+  <footer>
+    &copy; 2025 Attendance Portal — A Web Technology Project.
+  </footer>
+
+</body>
+</html>
