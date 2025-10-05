@@ -1,0 +1,110 @@
+:root {
+  --bg: #fdfaf6;
+  --text: #1e1e1e;
+  --header-bg: #2c3e50;
+  --card-bg: #ffffffd9;
+  --accent-present: #6a994e;
+  --accent-present-dark: #527c3e;
+  --accent-absent: #e63946;
+  --accent-absent-dark: #c62839;
+  --accent-summary: #457b9d;
+  --accent-summary-dark: #1d4e70;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+header {
+  color: #fff;
+  padding: 25px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.nav-home {
+  display: inline-block;
+  margin: 30px 0 40px 0;
+  padding: 12px 24px;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+
+table {
+  width: 90%;
+  max-width: 900px;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+table:hover { transform: scale(1.01); }
+
+th, td {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+}
+
+th {
+  color: #fff;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f7f3ed; }
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #8b6e5f;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  header { font-size: 2rem; }
+  .nav-home { font-size: 0.95rem; padding: 10px 20px; }
+  table { font-size: 0.9rem; }
+}
+
+/* Dynamic header and button colors */
+.header-present { background: var(--accent-present); }
+.header-absent { background: var(--accent-absent); }
+.header-summary { background: var(--accent-summary); }
+
+.button-present { background: var(--accent-present); }
+.button-present:hover { background: var(--accent-present-dark); }
+
+.button-absent { background: var(--accent-absent); }
+.button-absent:hover { background: var(--accent-absent-dark); }
+
+.button-summary { background: var(--accent-summary); }
+.button-summary:hover { background: var(--accent-summary-dark); }
