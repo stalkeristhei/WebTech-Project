@@ -95,7 +95,6 @@ footer {
   table { font-size: 0.9rem; }
 }
 
-/* Dynamic header and button colors */
 .header-present { background: var(--accent-present); }
 .header-absent { background: var(--accent-absent); }
 .header-summary { background: var(--accent-summary); }

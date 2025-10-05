@@ -102,8 +102,13 @@
 
   <a class="nav-home" href="homepage.html">🏠 Home</a>
 
-  <table>
-    <tr><th>Name</th><th>Days Present</th><th>Days Absent</th></tr>
+  <table id="attendanceTable">
+    <tr>
+      <th>Name</th>
+      <th>Days Present</th>
+      <th>Days Absent</th>
+      <th>Attendance %</th>
+    </tr>
     <tr><td>Darshita Dilip Naik</td><td>10</td><td>0</td></tr>
 <tr><td>Parth Alias Raghudas Sadashiv Natekar</td><td>10</td><td>0</td></tr>
 <tr><td>Siddharth Aloysius Francisco Menezes</td><td>10</td><td>0</td></tr>
@@ -195,6 +200,31 @@
   <footer>
     &copy; 2025 Attendance Portal — A Web Technology Project.
   </footer>
+
+  <script>
+    (function() {
+      const totalDaysDefault = 10;
+      const table = document.getElementById('attendanceTable');
+      if (!table) return;
+      // Loop rows (skip header)
+      Array.from(table.rows).forEach((row, i) => {
+        if (i === 0) return;
+        const cells = row.cells;
+        const present = parseInt((cells[1]?.textContent || '').trim(), 10) || 0;
+        const absent = parseInt((cells[2]?.textContent || '').trim(), 10) || 0;
+        const total = (present + absent) || totalDaysDefault;
+        const pct = total ? ((present / total) * 100) : 0;
+        const pctText = isNaN(pct) ? '—' : pct.toFixed(1) + '%';
+        if (cells.length >= 4) {
+          cells[3].textContent = pctText;
+        } else {
+          const td = document.createElement('td');
+          td.textContent = pctText;
+          row.appendChild(td);
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
