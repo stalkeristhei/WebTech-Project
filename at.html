@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Last 10 Days Attendance</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #fdfaf6;
       --text: #1e1e1e;
-      --accent: #457b9d; /* Blue-ish for summary */
+      --accent: #457b9d;
+      /* Blue-ish for summary */
       --accent-dark: #1d4e70;
       --header-bg: #2c3e50;
       --card-bg: #ffffffd9;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -69,17 +75,37 @@
       border-collapse: collapse;
       background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
       overflow: hidden;
       transition: transform 0.2s ease;
     }
 
-    table:hover { transform: scale(1.01); }
+    table:hover {
+      transform: scale(1.01);
+    }
 
-    th, td { padding: 16px; text-align: center; border-bottom: 1px solid #eee; font-size: 1rem; }
-    th { background: var(--accent); color: #fff; font-size: 1.1rem; letter-spacing: 0.5px; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover { background: #f7f3ed; }
+    th,
+    td {
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-size: 1rem;
+    }
+
+    th {
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7f3ed;
+    }
 
     footer {
       margin-top: 40px;
@@ -90,12 +116,22 @@
     }
 
     @media (max-width: 600px) {
-      header { font-size: 2rem; }
-      .nav-home { font-size: 0.95rem; padding: 10px 20px; }
-      table { font-size: 0.9rem; }
+      header {
+        font-size: 2rem;
+      }
+
+      .nav-home {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header>📊 Last 10 Days Attendance</header>
@@ -109,92 +145,436 @@
       <th>Days Absent</th>
       <th>Attendance %</th>
     </tr>
-    <tr><td>Darshita Dilip Naik</td><td>10</td><td>0</td></tr>
-<tr><td>Parth Alias Raghudas Sadashiv Natekar</td><td>10</td><td>0</td></tr>
-<tr><td>Siddharth Aloysius Francisco Menezes</td><td>10</td><td>0</td></tr>
-<tr><td>Aaron Keenan Cruz</td><td>10</td><td>0</td></tr>
-<tr><td>Al-Hamd Jahan</td><td>10</td><td>0</td></tr>
-<tr><td>Amey Vaikunth Kapdi</td><td>10</td><td>0</td></tr>
-<tr><td>Anant Mahesh Dessai</td><td>10</td><td>0</td></tr>
-<tr><td>Anant Omnath Naik</td><td>10</td><td>0</td></tr>
-<tr><td>Anchal Shukla</td><td>10</td><td>0</td></tr>
-<tr><td>Archisha Ramdas Morajker</td><td>10</td><td>0</td></tr>
-<tr><td>Asha Jha</td><td>10</td><td>0</td></tr>
-<tr><td>Asher Lysander Fernandes</td><td>10</td><td>0</td></tr>
-<tr><td>Billjoy Xavier Figueiredo</td><td>10</td><td>0</td></tr>
-<tr><td>Chaitanya Bhagwan Harmalkar</td><td>10</td><td>0</td></tr>
-<tr><td>Derron Lawrence Rodrigues</td><td>10</td><td>0</td></tr>
-<tr><td>Dewpearl Theresa Gonsalves</td><td>10</td><td>0</td></tr>
-<tr><td>Divya Sandeep Kadam</td><td>10</td><td>0</td></tr>
-<tr><td>Erica Jacquelin Mendes</td><td>10</td><td>0</td></tr>
-<tr><td>Flyson Samlon Dias</td><td>10</td><td>0</td></tr>
-<tr><td>Gavon Carmel Flink Sequeira</td><td>10</td><td>0</td></tr>
-<tr><td>Gino Jesus Barros</td><td>10</td><td>0</td></tr>
-<tr><td>Jagdish B. Parab</td><td>10</td><td>0</td></tr>
-<tr><td>Jesus Derrick Afonso</td><td>10</td><td>0</td></tr>
-<tr><td>Jiya Shivram Chati Haldankar</td><td>10</td><td>0</td></tr>
-<tr><td>John Paul Fernandes</td><td>10</td><td>0</td></tr>
-<tr><td>Joylen Fernandes</td><td>10</td><td>0</td></tr>
-<tr><td>Karthik S.</td><td>10</td><td>0</td></tr>
-<tr><td>Kartik Prasad Gharse</td><td>10</td><td>0</td></tr>
-<tr><td>Kenneth Anthony Vaz</td><td>10</td><td>0</td></tr>
-<tr><td>Khushi Kiran Naik</td><td>10</td><td>0</td></tr>
-<tr><td>Koushik Sharma</td><td>10</td><td>0</td></tr>
-<tr><td>Mehrab Khan</td><td>10</td><td>0</td></tr>
-<tr><td>Mohammed Nouman Choudhary</td><td>10</td><td>0</td></tr>
-<tr><td>Neha Balanarayana Jamakala</td><td>10</td><td>0</td></tr>
-<tr><td>Nitesh Suresh Pawar</td><td>10</td><td>0</td></tr>
-<tr><td>Omkar Abasaheb More</td><td>10</td><td>0</td></tr>
-<tr><td>Anurag P.</td><td>10</td><td>0</td></tr>
-<tr><td>Paulo Pereira</td><td>10</td><td>0</td></tr>
-<tr><td>Prachi Naresh Naik</td><td>10</td><td>0</td></tr>
-<tr><td>Pradnya Vishant Kande</td><td>10</td><td>0</td></tr>
-<tr><td>Prashant Mahadev Goundadkar</td><td>10</td><td>0</td></tr>
-<tr><td>Prathiksha Gajula</td><td>10</td><td>0</td></tr>
-<tr><td>Pratik Ramesh Murkar</td><td>10</td><td>0</td></tr>
-<tr><td>Rachel Maria Braganca</td><td>10</td><td>0</td></tr>
-<tr><td>Raghuvir Rajan Pai</td><td>10</td><td>0</td></tr>
-<tr><td>Risbern Brian Passanha</td><td>10</td><td>0</td></tr>
-<tr><td>Rishit Rajendra Dhargalkar</td><td>10</td><td>0</td></tr>
-<tr><td>Rohit Deepak Ghorpade</td><td>10</td><td>0</td></tr>
-<tr><td>Saachi Yogish Salkar</td><td>10</td><td>0</td></tr>
-<tr><td>Sachi Jeetendra Mithbauker</td><td>10</td><td>0</td></tr>
-<tr><td>Sahil Y. Chakri</td><td>9</td><td>1</td></tr>
-<tr><td>Saied Saahir Nurani</td><td>9</td><td>1</td></tr>
-<tr><td>Sakshi Sunil Kandolkar</td><td>9</td><td>1</td></tr>
-<tr><td>Sana Shaikh</td><td>9</td><td>1</td></tr>
-<tr><td>Sanaya Gaonkar</td><td>9</td><td>1</td></tr>
-<tr><td>Sania Rajendra Naik</td><td>9</td><td>1</td></tr>
-<tr><td>Sanika Santosh Sawal</td><td>9</td><td>1</td></tr>
-<tr><td>Mohammed Hussain Shaik</td><td>9</td><td>1</td></tr>
-<tr><td>Shail Nilesh Joshi</td><td>9</td><td>1</td></tr>
-<tr><td>Shane Frank Remedios</td><td>9</td><td>1</td></tr>
-<tr><td>Shraddha Vilas Naik</td><td>9</td><td>1</td></tr>
-<tr><td>Shriya Bhat</td><td>9</td><td>1</td></tr>
-<tr><td>Simran Sanjay Naik</td><td>9</td><td>1</td></tr>
-<tr><td>Skyla Barbosa</td><td>9</td><td>1</td></tr>
-<tr><td>Sravani Thota</td><td>9</td><td>1</td></tr>
-<tr><td>Swayam Kiran Prabhu</td><td>9</td><td>1</td></tr>
-<tr><td>Tejas Balu Kale</td><td>9</td><td>1</td></tr>
-<tr><td>Vansh Premanand Mayekar</td><td>9</td><td>1</td></tr>
-<tr><td>Vedant Damodar Palyekar</td><td>8</td><td>2</td></tr>
-<tr><td>Vedant Raju Borker</td><td>8</td><td>2</td></tr>
-<tr><td>Vedant Sattain Shirodkar</td><td>8</td><td>2</td></tr>
-<tr><td>Yash Sai Ramakant Dessai</td><td>8</td><td>2</td></tr>
-<tr><td>Aashutosh Mangirish Shenvi Kunkalienkar</td><td>8</td><td>2</td></tr>
-<tr><td>Ayush Pradip Fadte</td><td>8</td><td>2</td></tr>
-<tr><td>Dresden Jonas Viegas</td><td>8</td><td>2</td></tr>
-<tr><td>Effon Coutinho</td><td>8</td><td>2</td></tr>
-<tr><td>Gauray Vishwanath Naik</td><td>8</td><td>2</td></tr>
-<tr><td>Govindraj Avinash Suryarao Sardesai</td><td>7</td><td>3</td></tr>
-<tr><td>Neville Pereira</td><td>7</td><td>3</td></tr>
-<tr><td>Soham Ranjiv Rataboli</td><td>7</td><td>3</td></tr>
-<tr><td>Zameer Ahmad Khansoori</td><td>7</td><td>3</td></tr>
-<tr><td>Rishabh Ramlal Tari</td><td>7</td><td>3</td></tr>
-<tr><td>Anshul Anup Bhandiye</td><td>8</td><td>2</td></tr>
-<tr><td>Dhruv Nitin Bhat</td><td>9</td><td>1</td></tr>
-<tr><td>Joel Allwyn Noronha</td><td>8</td><td>2</td></tr>
-<tr><td>Ved Vasu Amonkar</td><td>5</td><td>5</td></tr>
+    <tr>
+      <td>Darshita Dilip Naik</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Parth Alias Raghudas Sadashiv Natekar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Siddharth Aloysius Francisco Menezes</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Aaron Keenan Cruz</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Al-Hamd Jahan</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Amey Vaikunth Kapdi</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Anant Mahesh Dessai</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Anant Omnath Naik</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Anchal Shukla</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Archisha Ramdas Morajker</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Asha Jha</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Asher Lysander Fernandes</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Billjoy Xavier Figueiredo</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Chaitanya Bhagwan Harmalkar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Derron Lawrence Rodrigues</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Dewpearl Theresa Gonsalves</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Divya Sandeep Kadam</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Erica Jacquelin Mendes</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Flyson Samlon Dias</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Gavon Carmel Flink Sequeira</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Gino Jesus Barros</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Jagdish B. Parab</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Jesus Derrick Afonso</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Jiya Shivram Chati Haldankar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>John Paul Fernandes</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Joylen Fernandes</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Karthik S.</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Kartik Prasad Gharse</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Kenneth Anthony Vaz</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Khushi Kiran Naik</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Koushik Sharma</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mehrab Khan</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Mohammed Nouman Choudhary</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Neha Balanarayana Jamakala</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Nitesh Suresh Pawar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Omkar Abasaheb More</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Anurag P.</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Paulo Pereira</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Prachi Naresh Naik</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Pradnya Vishant Kande</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Prashant Mahadev Goundadkar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Prathiksha Gajula</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Pratik Ramesh Murkar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rachel Maria Braganca</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Raghuvir Rajan Pai</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Risbern Brian Passanha</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rishit Rajendra Dhargalkar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Rohit Deepak Ghorpade</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Saachi Yogish Salkar</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Sachi Jeetendra Mithbauker</td>
+      <td>10</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Sahil Y. Chakri</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Saied Saahir Nurani</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sakshi Sunil Kandolkar</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sana Shaikh</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sanaya Gaonkar</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sania Rajendra Naik</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sanika Santosh Sawal</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Mohammed Hussain Shaik</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Shail Nilesh Joshi</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Shane Frank Remedios</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Shraddha Vilas Naik</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Shriya Bhat</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Simran Sanjay Naik</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Skyla Barbosa</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Sravani Thota</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Swayam Kiran Prabhu</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Tejas Balu Kale</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Vansh Premanand Mayekar</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Vedant Damodar Palyekar</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Vedant Raju Borker</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Vedant Sattain Shirodkar</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Yash Sai Ramakant Dessai</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Aashutosh Mangirish Shenvi Kunkalienkar</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Ayush Pradip Fadte</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Dresden Jonas Viegas</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Effon Coutinho</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Gauray Vishwanath Naik</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Govindraj Avinash Suryarao Sardesai</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Neville Pereira</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Soham Ranjiv Rataboli</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Zameer Ahmad Khansoori</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Rishabh Ramlal Tari</td>
+      <td>7</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Anshul Anup Bhandiye</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Dhruv Nitin Bhat</td>
+      <td>9</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Joel Allwyn Noronha</td>
+      <td>8</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Ved Vasu Amonkar</td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
   </table>
 
   <footer>
@@ -202,11 +582,10 @@
   </footer>
 
   <script>
-    (function() {
+    (function () {
       const totalDaysDefault = 10;
       const table = document.getElementById('attendanceTable');
       if (!table) return;
-      // Loop rows (skip header)
       Array.from(table.rows).forEach((row, i) => {
         if (i === 0) return;
         const cells = row.cells;
@@ -227,4 +606,5 @@
   </script>
 
 </body>
+
 </html>

@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Absent Today</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #fdfaf6;
       --text: #1e1e1e;
-      --accent: #e63946; /* Red-ish for absent */
+      --accent: #e63946;
+      /* Red-ish for absent */
       --accent-dark: #c62839;
       --header-bg: #2c3e50;
       --card-bg: #ffffffd9;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -69,17 +75,37 @@
       border-collapse: collapse;
       background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
       overflow: hidden;
       transition: transform 0.2s ease;
     }
 
-    table:hover { transform: scale(1.01); }
+    table:hover {
+      transform: scale(1.01);
+    }
 
-    th, td { padding: 16px; text-align: center; border-bottom: 1px solid #eee; font-size: 1rem; }
-    th { background: var(--accent); color: #fff; font-size: 1.1rem; letter-spacing: 0.5px; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover { background: #f7f3ed; }
+    th,
+    td {
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-size: 1rem;
+    }
+
+    th {
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7f3ed;
+    }
 
     footer {
       margin-top: 40px;
@@ -90,12 +116,22 @@
     }
 
     @media (max-width: 600px) {
-      header { font-size: 2rem; }
-      .nav-home { font-size: 0.95rem; padding: 10px 20px; }
-      table { font-size: 0.9rem; }
+      header {
+        font-size: 2rem;
+      }
+
+      .nav-home {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header>❌ Absent Today</header>
@@ -103,12 +139,30 @@
   <a class="nav-home" href="homepage.html">🏠 Home</a>
 
   <table>
-    <tr><th>Name</th><th>Reason</th></tr>
-    <tr><td>Rishabh Ramlal Tari</td><td>Fever</td></tr>
-    <tr><td>Anshul Anup Bhandiye</td><td>Cold</td></tr>
-    <tr><td>Dhruv Nitin Bhat</td><td>Headache</td></tr>
-    <tr><td>Joel Allwyn Noronha</td><td>Family Function</td></tr>
-    <tr><td>Ved Vasu Amonkar</td><td>Dengue</td></tr>
+    <tr>
+      <th>Name</th>
+      <th>Reason</th>
+    </tr>
+    <tr>
+      <td>Rishabh Ramlal Tari</td>
+      <td>Fever</td>
+    </tr>
+    <tr>
+      <td>Anshul Anup Bhandiye</td>
+      <td>Cold</td>
+    </tr>
+    <tr>
+      <td>Dhruv Nitin Bhat</td>
+      <td>Headache</td>
+    </tr>
+    <tr>
+      <td>Joel Allwyn Noronha</td>
+      <td>Family Function</td>
+    </tr>
+    <tr>
+      <td>Ved Vasu Amonkar</td>
+      <td>Dengue</td>
+    </tr>
   </table>
 
   <footer>
@@ -116,4 +170,5 @@
   </footer>
 
 </body>
+
 </html>
