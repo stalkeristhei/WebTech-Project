@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Attendance Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #2a9d8f;
+            --accent-dark: #21867a;
+            --accent-light: #52c2b5;
+            --card-bg: #ffffffd9;
+            --error: #e63946;
+            --success: #6a994e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 35px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .role-selector {
+            display: flex;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .role-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #666;
+        }
+
+        .role-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .login-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .secondary-btn {
+            width: 100%;
+            background: #f5f5f5;
+            color: var(--accent);
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .secondary-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .info-text {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 10px;
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <h1>📊 Attendance Login</h1>
+            <p>Choose your role to get started</p>
+        </div>
+            <!-- Role Selector -->
+            <div class="role-selector">
+                <button class="role-btn active" onclick="switchRole('teacher')">👨‍🏫 Teacher</button>
+                <button class="role-btn" onclick="switchRole('student')">👨‍🎓 Student</button>
+            </div>
+
+        <!-- Teacher Login Form -->
+        <div class="form-container active" id="teacher-form">
+            <form onsubmit="handleTeacherLogin(event)">
+                <div class="form-group">
+                    <label for="teacher-email">Email Address</label>
+                    <input type="email" id="teacher-email" placeholder="teacher@school.edu" required>
+                    <div class="error-message" id="teacher-email-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacher-password">Password</label>
+                    <input type="password" id="teacher-password" placeholder="Password" required>
+                    <div class="error-message" id="teacher-password-error"></div>
+                </div>
+
+                <button type="submit" class="login-btn">Login as Teacher</button>
+                <button type="button" class="secondary-btn" onclick="showTeacherSignup()">Create Account</button>
+            </form>
+        </div>
+
+        <!-- Student Login Form -->
+        <div class="form-container" id="student-form">
+            <form onsubmit="handleStudentLogin(event)">
+                <div class="form-group">
+                    <label for="student-name">Full Name</label>
+                    <input type="text" id="student-name" placeholder="Your name" required>
+                    <div class="error-message" id="student-name-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="student-id">Student ID</label>
+                    <input type="text" id="student-id" placeholder="Student ID" required>
+                    <div class="error-message" id="student-id-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="class-code">Class Code</label>
+                    <input type="text" id="class-code" placeholder="6-digit code" maxlength="6" required>
+                    <div class="error-message" id="class-code-error"></div>
+                    <div class="success-message" id="class-code-success"></div>
+                </div>
+
+                <button type="submit" class="login-btn">Join Class</button>
+            </form>
+
+            <div class="info-text">
+                Get the class code from your teacher to join
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role switching functionality
+        function switchRole(role) {
+            // Update button states
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update form visibility
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(role + '-form').classList.add('active');
+
+            // Clear any previous error messages
+            clearErrorMessages();
+        }
+
+        // Clear error messages
+        function clearErrorMessages() {
+            document.querySelectorAll('.error-message, .success-message').forEach(msg => {
+                msg.style.display = 'none';
+                msg.textContent = '';
+            });
+        }
+
+        // Teacher login handler
+        function handleTeacherLogin(event) {
+            event.preventDefault();
+            clearErrorMessages();
+
+            const email = document.getElementById('teacher-email').value;
+            const password = document.getElementById('teacher-password').value;
+
+            // Basic validation
+            if (!validateEmail(email)) {
+                showError('teacher-email-error', 'Please enter a valid email address');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('teacher-password-error', 'Password must be at least 6 characters');
+                return;
+            }
+
+            // Simulate login process
+            const loginBtn = event.target.querySelector('.login-btn');
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
+
+            setTimeout(() => {
+                // Simulate successful login
+                alert('Teacher login successful! You can now create classes and manage students.');
+                // Here you would typically redirect to teacher dashboard
+                // window.location.href = 'teacher-dashboard.html';
+                
+                loginBtn.textContent = 'Login as Teacher';
+                loginBtn.disabled = false;
+            }, 1500);
+        }
+
+        // Student login handler
+        function handleStudentLogin(event) {
+            event.preventDefault();
+            clearErrorMessages();
+
+            const name = document.getElementById('student-name').value.trim();
+            const studentId = document.getElementById('student-id').value.trim();
+            const classCode = document.getElementById('class-code').value.trim();
+
+            // Validation
+            if (name.length < 2) {
+                showError('student-name-error', 'Please enter your full name');
+                return;
+            }
+
+            if (studentId.length < 3) {
+                showError('student-id-error', 'Please enter a valid student ID');
+                return;
+            }
+
+            if (classCode.length !== 6) {
+                showError('class-code-error', 'Class code must be exactly 6 characters');
+                return;
+            }
+
+            // Simulate class code verification
+            const loginBtn = event.target.querySelector('.login-btn');
+            loginBtn.textContent = 'Joining Class...';
+            loginBtn.disabled = true;
+
+            setTimeout(() => {
+                // Simulate different scenarios
+                const validCodes = ['ABC123', 'XYZ789', 'DEF456'];
+                
+                if (validCodes.includes(classCode.toUpperCase())) {
+                    showSuccess('class-code-success', 'Class found! Joining...');
+                    setTimeout(() => {
+                        alert(`Welcome ${name}! You have successfully joined the class.`);
+                        // Here you would typically redirect to student dashboard
+                        // window.location.href = 'student-dashboard.html';
+                    }, 1000);
+                } else {
+                    showError('class-code-error', 'Invalid class code. Please check with your teacher.');
+                }
+                
+                loginBtn.textContent = 'Join Class';
+                loginBtn.disabled = false;
+            }, 1500);
+        }
+
+        // Teacher signup handler
+        function showTeacherSignup() {
+            window.location.href = 'teacher-register.html';
+        }
+
+        // Utility functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId);
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+        }
+
+        // Auto-format class code input
+        document.getElementById('class-code').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
+        });
+
+        // Add some demo class codes for testing
+        console.log('Demo class codes for testing: ABC123, XYZ789, DEF456');
+    </script>
+</body>
+</html>

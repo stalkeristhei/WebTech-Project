@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Registration - Student Attendance Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #2a9d8f;
+            --accent-dark: #21867a;
+            --accent-light: #52c2b5;
+            --card-bg: #ffffffd9;
+            --error: #e63946;
+            --success: #6a994e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 35px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .form-container {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .register-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .register-btn:hover {
+            background: var(--accent-dark);
+        }
+
+        .back-btn {
+            width: 100%;
+            background: #f5f5f5;
+            color: var(--accent);
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .info-text {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .requirements {
+            background: #f0f8ff;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .requirements h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .requirements ul {
+            margin-left: 15px;
+            color: #555;
+        }
+
+        .requirements li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                margin: 10px;
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="header">
+            <h1>👨‍🏫 Teacher Registration</h1>
+            <p>Create your teacher account</p>
+        </div>
+
+        <div class="form-container">
+            <form onsubmit="handleTeacherRegistration(event)">
+                <div class="form-group">
+                    <label for="teacher-fullname">Full Name</label>
+                    <input type="text" id="teacher-fullname" placeholder="Enter your full name" required>
+                    <div class="error-message" id="fullname-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacher-email">Email Address</label>
+                    <input type="email" id="teacher-email" placeholder="teacher@school.edu" required>
+                    <div class="error-message" id="email-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacher-phone">Phone Number</label>
+                    <input type="tel" id="teacher-phone" placeholder="Your phone number" required>
+                    <div class="error-message" id="phone-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="school-name">School/Institution</label>
+                    <input type="text" id="school-name" placeholder="School or institution name" required>
+                    <div class="error-message" id="school-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" required onchange="updateSubjects()">
+                        <option value="">Select your department</option>
+                        <option value="comp">Computer Engineering (Comp)</option>
+                        <option value="mech">Mechanical Engineering (Mech)</option>
+                        <option value="it">Information Technology (IT)</option>
+                        <option value="ecomp">Electronics & Computer Engineering (E&Comp)</option>
+                    </select>
+                    <div class="error-message" id="department-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" required>
+                        <option value="">First select a department</option>
+                    </select>
+                    <div class="error-message" id="subject-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacher-password">Password</label>
+                    <input type="password" id="teacher-password" placeholder="Create a strong password" required>
+                    <div class="error-message" id="password-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                    <div class="error-message" id="confirm-password-error"></div>
+                </div>
+
+                <button type="submit" class="register-btn">Create Teacher Account</button>
+                <div class="success-message" id="registration-success"></div>
+            </form>
+
+            <a href="login.html" class="back-btn">← Back to Login</a>
+
+            <div class="requirements">
+                <h4>📋 Account Requirements:</h4>
+                <ul>
+                    <li>Use your official school email address</li>
+                    <li>Password must be at least 8 characters long</li>
+                    <li>Include at least one number and special character</li>
+                    <li>Provide accurate school information for verification</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Subject mapping for each department
+        const departmentSubjects = {
+            comp: [
+                'Data Structures and Algorithms',
+                'Computer Programming',
+                'Database Management Systems',
+                'Software Engineering',
+                'Computer Networks',
+                'Operating Systems',
+                'Web Development',
+                'Object Oriented Programming',
+                'Computer Graphics',
+                'Artificial Intelligence'
+            ],
+            mech: [
+                'Engineering Mechanics',
+                'Thermodynamics',
+                'Fluid Mechanics',
+                'Manufacturing Technology',
+                'Machine Design',
+                'Heat Transfer',
+                'Materials Science',
+                'Mechanical Vibrations',
+                'Automotive Engineering',
+                'Industrial Engineering'
+            ],
+            it: [
+                'Information Systems',
+                'Network Security',
+                'Web Technologies',
+                'Database Systems',
+                'Software Testing',
+                'Mobile Application Development',
+                'Cloud Computing',
+                'Data Analytics',
+                'System Administration',
+                'IT Project Management'
+            ],
+            ecomp: [
+                'Digital Electronics',
+                'Microprocessors',
+                'Communication Systems',
+                'Control Systems',
+                'VLSI Design',
+                'Embedded Systems',
+                'Signal Processing',
+                'Electronic Circuits',
+                'Computer Architecture',
+                'Robotics'
+            ]
+        };
+
+        // Update subjects based on selected department
+        function updateSubjects() {
+            const departmentSelect = document.getElementById('department');
+            const subjectSelect = document.getElementById('subject');
+            const selectedDept = departmentSelect.value;
+
+            // Clear current options
+            subjectSelect.innerHTML = '';
+
+            if (selectedDept && departmentSubjects[selectedDept]) {
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select your subject';
+                subjectSelect.appendChild(defaultOption);
+
+                // Add subjects for selected department
+                departmentSubjects[selectedDept].forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.toLowerCase().replace(/\s+/g, '-');
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+            } else {
+                // No department selected
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'First select a department';
+                subjectSelect.appendChild(defaultOption);
+            }
+
+            // Clear any existing subject error
+            document.getElementById('subject-error').style.display = 'none';
+        }
+
+        // Clear error messages
+        function clearErrorMessages() {
+            document.querySelectorAll('.error-message, .success-message').forEach(msg => {
+                msg.style.display = 'none';
+                msg.textContent = '';
+            });
+        }
+
+        // Teacher registration handler
+        function handleTeacherRegistration(event) {
+            event.preventDefault();
+            clearErrorMessages();
+
+            const fullname = document.getElementById('teacher-fullname').value.trim();
+            const email = document.getElementById('teacher-email').value.trim();
+            const phone = document.getElementById('teacher-phone').value.trim();
+            const school = document.getElementById('school-name').value.trim();
+            const department = document.getElementById('department').value;
+            const subject = document.getElementById('subject').value;
+            const password = document.getElementById('teacher-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            let hasErrors = false;
+
+            // Validation
+            if (fullname.length < 3) {
+                showError('fullname-error', 'Please enter your full name');
+                hasErrors = true;
+            }
+
+            if (!validateEmail(email)) {
+                showError('email-error', 'Please enter a valid email address');
+                hasErrors = true;
+            }
+
+            if (phone.length < 10) {
+                showError('phone-error', 'Please enter a valid phone number');
+                hasErrors = true;
+            }
+
+            if (school.length < 3) {
+                showError('school-error', 'Please enter your school/institution name');
+                hasErrors = true;
+            }
+
+            if (!department) {
+                showError('department-error', 'Please select your department');
+                hasErrors = true;
+            }
+
+            if (!subject) {
+                showError('subject-error', 'Please select your subject');
+                hasErrors = true;
+            }
+
+            if (!validatePassword(password)) {
+                showError('password-error', 'Password must be at least 8 characters with one number and special character');
+                hasErrors = true;
+            }
+
+            if (password !== confirmPassword) {
+                showError('confirm-password-error', 'Passwords do not match');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Simulate registration process
+            const registerBtn = document.querySelector('.register-btn');
+            registerBtn.textContent = 'Creating Account...';
+            registerBtn.disabled = true;
+
+            setTimeout(() => {
+                // Simulate successful registration
+                showSuccess('registration-success', 'Account created successfully! You can now login.');
+                
+                // Reset form
+                document.querySelector('form').reset();
+                
+                // Redirect to login after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                
+                registerBtn.textContent = 'Create Teacher Account';
+                registerBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Utility functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            // At least 8 characters, one number, one special character
+            const re = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+            return re.test(password);
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId);
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
