@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Attendance Entry</title>
+    <!-- Load Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #457b9d;
+            --accent-dark: #1d4e70;
+            --header-bg: #2c3e50;
+            --present-btn: #38a169;
+            --present-btn-hover: #2f855a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header-section {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 25px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Custom Table Styling */
+        .teacher-table th {
+            background: var(--accent);
+            color: white;
+        }
+
+        .teacher-table tbody tr:hover {
+            background: #f7f3ed;
+        }
+
+        .present-btn {
+            background-color: var(--present-btn);
+            transition: background-color 0.15s ease, transform 0.1s ease;
+        }
+        .present-btn:hover {
+            background-color: var(--present-btn-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Message Box Styling */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateY(-50px);
+            z-index: 2000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .message-box.success { background-color: #38a169; }
+        .message-box.error { background-color: #e53e3e; }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header-section">🧑‍🏫 Daily Roll Call</div>
+    <a class="nav-link" href="student_view.html">📊 Student Dashboard</a>
+
+    <!-- Current Date Selector -->
+    <div class="mb-6 p-4 bg-white rounded-xl shadow-lg w-full max-w-xl text-center">
+        <label for="attendanceDate" class="block text-lg font-semibold mb-2 text-gray-700">Attendance Date:</label>
+        <input type="date" id="attendanceDate" class="w-full max-w-xs p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-blue-500 transition duration-150">
+        <p id="dateWarning" class="text-sm text-red-500 mt-2 hidden">Attendance is only allowed for the current or previous day.</p>
+    </div>
+
+    <!-- Student List Table -->
+    <div class="w-full max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden">
+        <table class="w-full border-collapse teacher-table">
+            <thead>
+                <tr class="text-white text-lg">
+                    <th class="p-4 w-1/4">Roll No.</th>
+                    <th class="p-4 w-1/2">Name</th>
+                    <th class="p-4 w-1/4">Action</th>
+                </tr>
+            </thead>
+            <tbody id="studentListBody">
+                <tr>
+                    <td colspan="3" class="py-10 text-gray-500">Loading student list...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Message Box for feedback -->
+    <div id="messageBox" class="message-box"></div>
+
+
+    <script type="module">
+        // 1. IMPORT SUPABASE CLIENT
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // 2. SUPABASE CONFIGURATION (Using the keys from student_view.html)
+        const supabaseUrl = 'https://sqqjkryvfkozlkyioaew.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcWprcnl2ZmtvemxreWlvYWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjYwMDksImV4cCI6MjA3NjgwMjAwOX0.PvUwysgO11xYjjnbDORKcDUSbERyENXcgQ3e0zQQSO0';
+        
+        // Table and Column Names
+        const TABLE_NAME = 'student_log'; 
+        const ROLL_COLUMN = '"Roll Number"';
+        const NAME_COLUMN = '"Name"';
+        const DATE_COLUMN = '"Date"'; 
+        const STATUS_COLUMN = '"Status"';
+        const SELECT_COLUMNS = `${ROLL_COLUMN}, ${NAME_COLUMN}`;
+
+        // 3. INITIALIZE SUPABASE CLIENT
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const studentListBody = document.getElementById('studentListBody');
+        const attendanceDateInput = document.getElementById('attendanceDate');
+        const dateWarning = document.getElementById('dateWarning');
+        const messageBox = document.getElementById('messageBox');
+
+        let students = []; // Cache of the student list
+        // Stores Roll Number + Date for already marked students to disable the button
+        let markedStudents = new Set(); 
+
+        // --- Utility Functions ---
+
+        /** Shows a temporary message to the user. */
+        function showMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = `message-box show ${type}`;
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+        
+        /** Formats the date to YYYY-MM-DD (Supabase standard) */
+        const formatDate = (date) => date.toISOString().split('T')[0];
+
+        /**
+         * Checks if a date is in the future.
+         */
+        function validateDate(selectedDateStr) {
+            const today = formatDate(new Date());
+            
+            // Cannot mark attendance for a future date
+            if (selectedDateStr > today) {
+                dateWarning.classList.remove('hidden');
+                return false;
+            } else {
+                dateWarning.classList.add('hidden');
+                return true;
+            }
+        }
+
+        // --- Database Logic ---
+
+        /** * Fetches a distinct list of students from the log table to create the roster. 
+         * This uses the unique Roll Number to ensure accuracy.
+         */
+        async function fetchDistinctStudents() {
+            studentListBody.innerHTML = '<tr><td colspan="3" class="py-10 text-gray-500">Fetching student roster...</td></tr>';
+            
+            // Use 'select' without 'distinct' and filter later to be robust
+            let { data, error } = await supabase
+                .from(TABLE_NAME)
+                .select(SELECT_COLUMNS)
+                .order(ROLL_COLUMN, { ascending: true });
+
+            if (error) {
+                console.error("Error fetching distinct students:", error.message);
+                showMessage(`Error loading roster: ${error.message}`, 'error');
+                return;
+            }
+            
+            // Filter to unique Roll Numbers locally
+            const uniqueRolls = new Set();
+            const uniqueStudents = [];
+            data.forEach(s => {
+                const roll = s["Roll Number"];
+                if (roll && !uniqueRolls.has(roll)) {
+                    uniqueRolls.add(roll);
+                    uniqueStudents.push(s);
+                }
+            });
+
+            students = uniqueStudents;
+            renderStudentList();
+            await checkMarkedStatus(); // Initial check for marked students
+        }
+        
+        /** * Checks which students have already been marked present/absent for the selected date. 
+         * This is crucial to prevent duplicate entries.
+         */
+        async function checkMarkedStatus() {
+            const selectedDate = attendanceDateInput.value;
+            markedStudents.clear();
+            
+            if (!selectedDate || !validateDate(selectedDate)) {
+                 renderStudentList();
+                 return;
+            }
+
+            // Fetch all entries for the selected date
+            let { data, error } = await supabase
+                .from(TABLE_NAME)
+                .select(ROLL_COLUMN)
+                .eq(DATE_COLUMN, selectedDate);
+
+            if (error) {
+                 console.error("Error checking marked status:", error.message);
+                 return;
+            }
+
+            data.forEach(record => {
+                const roll = record["Roll Number"];
+                // The key is just the Roll Number since we query by date
+                if (roll) markedStudents.add(roll);
+            });
+            
+            renderStudentList();
+        }
+
+        /** Handles the button click to mark a student present */
+        async function markPresent(rollNumber, studentName) {
+            const selectedDate = attendanceDateInput.value;
+
+            if (!selectedDate) {
+                showMessage("Please select an Attendance Date first.", 'error');
+                return;
+            }
+
+            if (!validateDate(selectedDate)) {
+                 showMessage("Cannot mark future attendance.", 'error');
+                 return;
+            }
+            
+            if (markedStudents.has(rollNumber)) {
+                showMessage(`${studentName} already marked for ${selectedDate}.`, 'error');
+                return;
+            }
+
+            // Data to insert into the log table
+            const newEntry = {
+                [ROLL_COLUMN]: rollNumber,
+                [NAME_COLUMN]: studentName,
+                [DATE_COLUMN]: selectedDate,
+                [STATUS_COLUMN]: 'Present'
+            };
+
+            // Insert the new record
+            const { error } = await supabase
+                .from(TABLE_NAME)
+                .insert([newEntry]);
+
+            if (error) {
+                console.error("Insert error:", error.message);
+                // IMPORTANT: If you get a duplicate key error, you likely need a RLS policy on INSERT
+                showMessage(`Failed to mark present. Check RLS Policy for 'INSERT' access. Error: ${error.message}`, 'error');
+            } else {
+                showMessage(`${studentName} marked PRESENT for ${selectedDate}!`, 'success');
+                markedStudents.add(rollNumber); // Optimistically update the local marked set
+                renderStudentList(); // Re-render to disable the button
+            }
+        }
+        
+        // --- Rendering ---
+
+        /** Renders the list of students with 'Mark Present' buttons */
+        function renderStudentList() {
+            studentListBody.innerHTML = '';
+            
+            if (students.length === 0) {
+                 studentListBody.innerHTML = '<tr><td colspan="3" class="py-10 text-gray-500">No students found. Add initial data to the log table to build the roster.</td></tr>';
+                 return;
+            }
+
+            students.forEach(student => {
+                const rollNumber = student["Roll Number"];
+                const name = student.Name;
+                const isMarked = markedStudents.has(rollNumber);
+                
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100';
+                row.innerHTML = `
+                    <td class="p-4 text-gray-700 font-semibold">${rollNumber}</td>
+                    <td class="p-4 font-medium text-left">${name}</td>
+                    <td class="p-4">
+                        <button 
+                            data-roll="${rollNumber}"
+                            data-name="${name}"
+                            class="present-btn text-white font-bold py-2 px-4 rounded-full shadow-md text-sm transition ${isMarked ? 'opacity-50 cursor-not-allowed bg-gray-500' : ''}"
+                            ${isMarked ? 'disabled' : ''}
+                        >
+                            ${isMarked ? 'Marked' : 'Mark Present'}
+                        </button>
+                    </td>
+                `;
+                studentListBody.appendChild(row);
+            });
+            
+            // Add event listeners to the new buttons
+            studentListBody.querySelectorAll('.present-btn').forEach(button => {
+                if (!button.disabled) {
+                    button.addEventListener('click', () => {
+                        const roll = button.getAttribute('data-roll');
+                        const name = button.getAttribute('data-name');
+                        markPresent(roll, name);
+                    });
+                }
+            });
+        }
+        
+        // --- Initialization ---
+
+        // Set the default date to today
+        attendanceDateInput.value = formatDate(new Date());
+
+        // Event listener for date change to update marked status
+        attendanceDateInput.addEventListener('change', async (e) => {
+            const selectedDate = e.target.value;
+            // Re-validate and re-check marked status whenever the date changes
+            if (validateDate(selectedDate)) {
+                await checkMarkedStatus();
+            } else {
+                 checkMarkedStatus(); // Clear marked status if date is invalid
+            }
+        });
+        
+        // Initial setup
+        fetchDistinctStudents();
+
+    </script>
+
+</body>
+
+</html>

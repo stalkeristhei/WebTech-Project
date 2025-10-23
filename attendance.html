@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Attendance Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #457b9d;
+            --accent-dark: #1d4e70;
+            --header-bg: #2c3e50;
+            --card-bg: #ffffffd9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 25px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-home {
+            display: inline-block;
+            margin: 30px 0 40px 0;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-home:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        table {
+            width: 90%;
+            max-width: 900px;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        table:hover {
+            transform: scale(1.01);
+        }
+
+        th,
+        td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 1rem;
+        }
+
+        th {
+            background: var(--accent);
+            color: #fff;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f7f3ed;
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #8b6e5f;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                font-size: 2rem;
+            }
+
+            .nav-home {
+                font-size: 0.95rem;
+                padding: 10px 20px;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>📊 Live Attendance Dashboard</header>
+    <a class="nav-home" href="index.html">🏠 Home</a>
+
+    <table id="attendanceTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Days Present</th>
+                <th>Days Absent</th>
+                <th>Attendance %</th>
+            </tr>
+        </thead>
+        <tbody id="attendanceBody">
+            <tr>
+                <td colspan="4">Loading attendance data...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <footer>
+        &copy; 2025 Attendance Portal — A Web Technology Project.
+    </footer>
+
+    <script type="module">
+        // 1. IMPORT SUPABASE CLIENT
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // 2. SUPABASE CONFIGURATION (Using your exact URL and Key)
+        const supabaseUrl = 'https://sqqjkryvfkozlkyioaew.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcWprcnl2ZmtvemxreWlvYWV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjYwMDksImV4cCI6MjA3NjgwMjAwOX0.PvUwysgO11xYjjnbDORKcDUSbERyENXcgQ3e0zQQSO0';
+        
+        // 🚨 FINAL CORRECTED TABLE NAME (Must be the simple, lowercase name in your DB)
+        const TABLE_NAME = 'student_log'; 
+        
+        // COLUMN NAMES (Quotes are needed because Name/Status are capitalized in DB)
+        const NAME_COLUMN = '"Name"';
+        const STATUS_COLUMN = '"Status"';
+        const SELECT_COLUMNS = `${NAME_COLUMN}, ${STATUS_COLUMN}`;
+
+
+        // 3. INITIALIZE SUPABASE CLIENT
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const tableBody = document.getElementById("attendanceBody");
+
+        /**
+         * Processes the raw daily log data to calculate cumulative attendance.
+         * Assumes data columns are 'Name' and 'Status'.
+         */
+        function calculateSummary(logData) {
+            const summary = {};
+
+            for (const record of logData) {
+                // Accessing the properties by the exact capitalized names from the database
+                const name = record.Name;
+                const status = record.Status ? record.Status.toLowerCase().trim() : '';
+
+                if (!summary[name]) {
+                    summary[name] = { name: name, present: 0, absent: 0 };
+                }
+
+                // Count 'Present' status
+                if (status.includes('present') || status.includes('p')) {
+                    summary[name].present++;
+                } 
+                // Count 'Absent' status
+                else if (status.includes('absent') || status.includes('a')) {
+                    summary[name].absent++;
+                }
+            }
+            
+            return Object.values(summary);
+        }
+
+        /**
+         * Renders the processed attendance summary data into the HTML table.
+         */
+        const renderData = (summaryData) => {
+            tableBody.innerHTML = "";
+            if (!summaryData || summaryData.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='4'>No records found. (Check Supabase RLS and Replication settings)</td></tr>";
+                return;
+            }
+
+            summaryData.forEach((item) => {
+                const name = item.name || "Unknown";
+                const present = item.present ?? 0;
+                const absent = item.absent ?? 0;
+                const total = present + absent;
+                const percent = total ? ((present / total) * 100).toFixed(1) + "%" : "—";
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${name}</td>
+                    <td>${present}</td>
+                    <td>${absent}</td>
+                    <td>${percent}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        };
+
+        /**
+         * Fetches all daily log data and calculates attendance summary, then sets up real-time listener.
+         */
+        async function fetchAndSubscribeAttendance() {
+            // Initial Data Fetch
+            let { data: logData, error: fetchError } = await supabase
+                .from(TABLE_NAME)
+                .select(SELECT_COLUMNS); 
+            
+            if (fetchError) {
+                console.error("Error fetching initial data:", fetchError.message);
+                tableBody.innerHTML = `<tr><td colspan='4'>Error loading data: ${fetchError.message}</td></tr>`;
+                return;
+            }
+
+            // Render initial data
+            const summaryData = calculateSummary(logData);
+            renderData(summaryData);
+
+            // 4. Set up Real-Time Subscription for live updates
+            supabase
+                .channel('realtime_attendance')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: TABLE_NAME }, // Listen to all changes on the student_log table
+                    async (payload) => {
+                        console.log('Real-time change received! Recalculating attendance.', payload);
+                        
+                        // Re-fetch all data to ensure accurate summary calculation
+                        let { data: updatedLogData, error: updateError } = await supabase
+                            .from(TABLE_NAME)
+                            .select(SELECT_COLUMNS);
+
+                        if (!updateError) {
+                            const updatedSummary = calculateSummary(updatedLogData);
+                            renderData(updatedSummary); // Update the table on the screen
+                        } else {
+                            console.error("Error fetching updated data:", updateError.message);
+                        }
+                    }
+                )
+                .subscribe(); // ACTIVATE the listener
+        }
+
+        fetchAndSubscribeAttendance();
+    </script>
+
+</body>
+
+</html>
