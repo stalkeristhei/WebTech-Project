@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Last 10 Days Attendance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fdfaf6;
+      --text: #1e1e1e;
+      --accent: #457b9d;
+      --accent-dark: #1d4e70;
+      --header-bg: #2c3e50;
+      --card-bg: #ffffffd9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 25px 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-home {
+      display: inline-block;
+      margin: 30px 0 40px 0;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.25s ease;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-home:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    table {
+      width: 90%;
+      max-width: 900px;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    table:hover {
+      transform: scale(1.01);
+    }
+
+    th,
+    td {
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      font-size: 1rem;
+    }
+
+    th {
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7f3ed;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #8b6e5f;
+      opacity: 0.8;
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 2rem;
+      }
+
+      .nav-home {
+        font-size: 0.95rem;
+        padding: 10px 20px;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>📊 Last 10 Days Attendance</header>
+  <a class="nav-home" href="index.html">🏠 Home</a>
+
+  <table id="attendanceTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Days Present</th>
+        <th>Days Absent</th>
+        <th>Attendance %</th>
+      </tr>
+    </thead>
+    <tbody id="attendanceBody">
+      <tr><td colspan="4">Loading attendance data...</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    &copy; 2025 Attendance Portal — A Web Technology Project.
+  </footer>
+
+  <script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDvUObe0JwCG9Y-5puck4McfbwmYzfiiDk",
+      authDomain: "student-attendence-track-85e16.firebaseapp.com",
+      projectId: "student-attendence-track-85e16",
+      storageBucket: "student-attendence-track-85e16.firebasestorage.app",
+      messagingSenderId: "3431939849",
+      appId: "1:3431939849:web:4843a0e7d0edea4b99ddd8",
+      measurementId: "G-FL25RDDE26"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Reference attendance collection
+    const attendanceRef = collection(db, "attendance");
+    const tableBody = document.getElementById("attendanceBody");
+
+    // Listen for real-time updates
+    onSnapshot(attendanceRef, (snapshot) => {
+      tableBody.innerHTML = ""; // Clear table
+      if (snapshot.empty) {
+        tableBody.innerHTML = "<tr><td colspan='4'>No records found.</td></tr>";
+        return;
+      }
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+
+        // Example data fields you should have in Firestore:
+        // name, daysPresent, daysAbsent
+        const name = data.name || "Unknown";
+        const present = data.daysPresent ?? 0;
+        const absent = data.daysAbsent ?? 0;
+        const total = present + absent;
+        const percent = total ? ((present / total) * 100).toFixed(1) + "%" : "—";
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${name}</td>
+          <td>${present}</td>
+          <td>${absent}</td>
+          <td>${percent}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+  </script>
+
+</body>
+</html>
