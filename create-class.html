@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Class - Teacher Portal</title>
+    <title>Class Management - Teacher Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -326,6 +326,10 @@
             <h1>🎓 Teacher Class Portal</h1>
             <p>Create and manage classes with unique access codes</p>
         </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="teacher-dashboard.html" class="btn" style="background: #f0f0f0; color: var(--accent); padding: 10px 20px; border: 1px solid #ddd;">← Back to Dashboard</a>
+        </div>
 
         <div class="main-grid">
             <!-- Create Class Form -->
@@ -509,29 +513,54 @@
         // Store classes in localStorage
         let classes = JSON.parse(localStorage.getItem('teacherClasses') || '[]');
 
-        // Generate unique class code based on department and subject
-        function generateClassCode(department, subject, semester) {
-            // Create base code from department and semester
+        // Utility functions for messages
+        function clearMessages() {
+            document.getElementById('success-msg').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('error-msg');
+            errorElement.textContent = 'Error: ' + message;
+            errorElement.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-msg');
+            successElement.textContent = 'Success: ' + message;
+            successElement.style.display = 'block';
+        }
+
+        // Generate unique class code
+        function generateClassCode(department, semester) {
             const deptCode = department.toUpperCase().substring(0, 2);
-            const subjectCode = subject.replace(/\s+/g, '').substring(0, 3).toUpperCase();
-            const semCode = semester.toString().padStart(2, '0');
-            
-            // Generate random suffix
+            const semCode = semester.toString(); 
+
+            // Generate random suffix (3 characters)
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let suffix = '';
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < 3; i++) {
                 suffix += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             
-            const baseCode = `${deptCode}${subjectCode}${semCode}${suffix}`;
+            let newCode = `${deptCode}${semCode}${suffix}`; 
             
-            // Ensure uniqueness
-            const exists = classes.some(cls => cls.code === baseCode);
-            if (exists) {
-                return generateClassCode(department, subject, semester); // Retry
+            // Ensure uniqueness 
+            let attempt = 0;
+            while (classes.some(cls => cls.code === newCode) && attempt < 100) {
+                 suffix = '';
+                 for (let i = 0; i < 3; i++) {
+                    suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+                 }
+                 newCode = `${deptCode}${semCode}${suffix}`;
+                 attempt++;
+            }
+
+            if (attempt === 100) {
+                return null;
             }
             
-            return baseCode;
+            return newCode;
         }
 
         // Update subjects based on selected department
@@ -540,7 +569,7 @@
             const subjectSelect = document.getElementById('subject');
             const selectedDept = departmentSelect.value;
 
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjectSelect.innerHTML = '<option value="">First select a department</option>';
 
             if (selectedDept && departmentSubjects[selectedDept]) {
                 departmentSubjects[selectedDept].forEach(subject => {
@@ -552,6 +581,56 @@
             }
         }
 
+        // Delete class
+        function deleteClass(classCode) {
+            // Using a custom confirmation function instead of alert/confirm
+            showCustomModal(`Are you sure you want to delete the class with code ${classCode}? This action cannot be undone.`, () => {
+                classes = classes.filter(cls => cls.code !== classCode);
+                localStorage.setItem('teacherClasses', JSON.stringify(classes));
+                renderClasses();
+                updateStats();
+            });
+        }
+        
+        // Custom confirmation modal (basic implementation)
+        function showCustomModal(message, callback) {
+            const modalId = 'confirmationModal';
+            let modal = document.getElementById(modalId);
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = modalId;
+                modal.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
+                    z-index: 1000;
+                `;
+                modal.innerHTML = `
+                    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                        <p id="modal-message" style="margin-bottom: 20px; font-size: 1.1rem;"></p>
+                        <button id="confirm-btn" style="background: var(--error); color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-right: 10px; cursor: pointer;">Delete</button>
+                        <button id="cancel-btn" style="background: #ccc; color: var(--text); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Cancel</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            }
+            
+            document.getElementById('modal-message').textContent = message;
+            modal.style.display = 'flex';
+
+            const confirmBtn = document.getElementById('confirm-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            confirmBtn.onclick = () => {
+                modal.style.display = 'none';
+                callback();
+            };
+
+            cancelBtn.onclick = () => {
+                modal.style.display = 'none';
+            };
+        }
+
+
         // Create new class
         function createClass(event) {
             event.preventDefault();
@@ -562,6 +641,8 @@
             const semester = document.getElementById('semester').value;
             const section = document.getElementById('section').value.trim();
             const academicYear = document.getElementById('academic-year').value.trim();
+            const departmentName = document.getElementById('department').options[document.getElementById('department').selectedIndex].textContent;
+
 
             // Validation
             if (!department || !subject || !semester || !section || !academicYear) {
@@ -569,7 +650,7 @@
                 return;
             }
 
-            // Check for duplicate class
+            // Check for duplicate class 
             const duplicate = classes.find(cls => 
                 cls.department === department && 
                 cls.subject === subject && 
@@ -579,42 +660,44 @@
             );
 
             if (duplicate) {
-                showError('This class already exists! Please check the details.');
+                showError('This class already exists! Class code: ' + duplicate.code);
                 return;
             }
 
             // Generate unique class code
-            const classCode = generateClassCode(department, subject, semester);
-            
+            const classCode = generateClassCode(department, semester);
+
+            if (!classCode) {
+                showError('Error generating a unique class code. Please try again.');
+                return;
+            }
+
             const newClass = {
-                id: Date.now(),
+                code: classCode,
                 department: department,
+                departmentName: departmentName,
                 subject: subject,
-                semester: parseInt(semester),
+                semester: semester,
                 section: section,
                 academicYear: academicYear,
-                code: classCode,
-                created: new Date().toLocaleDateString(),
-                students: []
+                students: Math.floor(Math.random() * 50) + 10 // Mock student count
             };
 
             classes.push(newClass);
             localStorage.setItem('teacherClasses', JSON.stringify(classes));
 
-            showSuccess(`Class created successfully!\nClass Code: ${classCode}\nShare this code with your students to join the class.`);
-            
-            // Reset form
-            event.target.reset();
-            
-            // Refresh display
-            displayClasses();
+            showSuccess(`Class "${subject} - ${section}" created successfully! Code: ${classCode}`);
+            event.target.reset(); // Clear form
+            document.getElementById('subject').innerHTML = '<option value="">First select a department</option>';
+            renderClasses();
             updateStats();
         }
 
-        // Display all classes
-        function displayClasses() {
+        // Render classes list
+        function renderClasses() {
             const container = document.getElementById('classes-container');
-            
+            container.innerHTML = ''; 
+
             if (classes.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -625,129 +708,95 @@
                 return;
             }
 
-            container.innerHTML = classes.map(cls => {
-                const deptName = getDepartmentName(cls.department);
-                return `
-                    <div class="class-item">
-                        <div class="class-header">
-                            <div class="class-info">
-                                <h3>${cls.subject}</h3>
-                                <p><strong>Department:</strong> ${deptName}</p>
-                                <p><strong>Semester:</strong> ${cls.semester} | <strong>Section:</strong> ${cls.section}</p>
-                                <p><strong>Academic Year:</strong> ${cls.academicYear}</p>
-                                <p><strong>Created:</strong> ${cls.created} | <strong>Students:</strong> ${cls.students.length}</p>
-                            </div>
-                            <div class="class-code-display">${cls.code}</div>
+            classes.forEach(cls => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.innerHTML = `
+                    <div class="class-header">
+                        <div class="class-info">
+                            <h3>${cls.subject} (${cls.section})</h3>
+                            <p>${cls.departmentName} | Semester ${cls.semester}</p>
+                            <p>Academic Year: ${cls.academicYear}</p>
+                            <p style="margin-top: 10px;">Students Enrolled: <span style="font-weight: 700;">${cls.students}</span></p>
                         </div>
-                        <div class="class-actions">
-                            <button class="btn-copy" onclick="copyCode('${cls.code}')">
-                                📋 Copy Code
-                            </button>
-                            <button class="btn-delete" onclick="deleteClass(${cls.id})">
-                                🗑️ Delete
-                            </button>
-                        </div>
+                        <div class="class-code-display">${cls.code}</div>
+                    </div>
+                    <div class="class-actions">
+                        <button class="btn-copy" onclick="copyCode('${cls.code}', this)">Copy Code</button>
+                        <button class="btn" style="background: var(--accent); color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem;">View Attendance</button>
+                        <button class="btn-delete" onclick="deleteClass('${cls.code}')">Delete Class</button>
                     </div>
                 `;
-            }).join('');
+                container.appendChild(classItem);
+            });
         }
 
         // Update statistics
         function updateStats() {
-            const totalClasses = classes.length;
-            const departments = [...new Set(classes.map(cls => cls.department))];
+            const totalClassesElement = document.getElementById('total-classes');
+            const totalDepartmentsElement = document.getElementById('total-departments');
+            const breakdownElement = document.getElementById('department-breakdown');
             
-            document.getElementById('total-classes').textContent = totalClasses;
-            document.getElementById('total-departments').textContent = departments.length;
+            totalClassesElement.textContent = classes.length;
+
+            const departmentSet = new Set(classes.map(cls => cls.departmentName));
+            totalDepartmentsElement.textContent = departmentSet.size;
 
             // Department breakdown
-            const breakdown = document.getElementById('department-breakdown');
-            if (departments.length === 0) {
-                breakdown.innerHTML = '<p style="color: #64748b; font-style: italic;">Create classes to see breakdown</p>';
+            const deptCounts = classes.reduce((acc, cls) => {
+                acc[cls.departmentName] = (acc[cls.departmentName] || 0) + 1;
+                return acc;
+            }, {});
+
+            breakdownElement.innerHTML = '';
+            if (Object.keys(deptCounts).length > 0) {
+                for (const dept in deptCounts) {
+                    breakdownElement.innerHTML += `<p style="display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #eee;"><span>${dept}</span> <span style="font-weight: 600;">${deptCounts[dept]} Classes</span></p>`;
+                }
             } else {
-                const deptCounts = departments.map(dept => {
-                    const count = classes.filter(cls => cls.department === dept).length;
-                    const name = getDepartmentName(dept);
-                    return `<p><strong>${name}:</strong> ${count} class${count !== 1 ? 'es' : ''}</p>`;
-                }).join('');
-                breakdown.innerHTML = deptCounts;
+                 breakdownElement.innerHTML = '<p style="color: #64748b; font-style: italic;">Create classes to see breakdown</p>';
             }
         }
 
-        // Get department full name
-        function getDepartmentName(deptCode) {
-            const names = {
-                comp: 'Computer Engineering',
-                mech: 'Mechanical Engineering',
-                it: 'Information Technology',
-                ecomp: 'Electronics & Computer Engineering',
-                civil: 'Civil Engineering',
-                electrical: 'Electrical Engineering'
-            };
-            return names[deptCode] || deptCode;
-        }
-
-        // Copy class code to clipboard
-        function copyCode(code) {
+        // Copy code to clipboard
+        function copyCode(code, button) {
+            document.execCommand('copy'); // Fallback for older browsers/environments
             navigator.clipboard.writeText(code).then(() => {
-                alert(`✅ Class code "${code}" copied to clipboard!\nShare this with your students.`);
-            }).catch(() => {
-                prompt('Copy this class code:', code);
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
             });
         }
 
-        // Delete class
-        function deleteClass(classId) {
-            const classToDelete = classes.find(cls => cls.id === classId);
-            if (!classToDelete) return;
 
-            if (confirm(`Are you sure you want to delete "${classToDelete.subject}" class?\nThis action cannot be undone.`)) {
-                classes = classes.filter(cls => cls.id !== classId);
-                localStorage.setItem('teacherClasses', JSON.stringify(classes));
-                
-                displayClasses();
-                updateStats();
-                showSuccess('Class deleted successfully!');
+        // Load initial state and event handlers
+        window.onload = function() {
+            // *** HANDLE NAVIGATION FROM TEACHER DASHBOARD ***
+            // Check if the URL contains the '#create' hash (from the Dashboard link)
+            if (window.location.hash === '#create') {
+                const createFormCard = document.querySelector('.main-grid > .card:first-child');
+                if (createFormCard) {
+                    // Smooth scroll to the form
+                    createFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Optional: Briefly highlight the form
+                    createFormCard.style.border = '3px solid var(--accent-light)';
+                    createFormCard.style.boxShadow = '0 0 20px rgba(42, 157, 143, 0.5)';
+                    setTimeout(() => {
+                        createFormCard.style.border = '2px solid #e0e0e0'; /* Reset original border */
+                        createFormCard.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.1)';
+                    }, 2000);
+                }
             }
-        }
-
-        // Message functions
-        function clearMessages() {
-            document.getElementById('success-msg').style.display = 'none';
-            document.getElementById('error-msg').style.display = 'none';
-        }
-
-        function showSuccess(message) {
-            const successMsg = document.getElementById('success-msg');
-            successMsg.textContent = message;
-            successMsg.style.display = 'block';
             
-            setTimeout(() => {
-                successMsg.style.display = 'none';
-            }, 8000);
-        }
-
-        function showError(message) {
-            const errorMsg = document.getElementById('error-msg');
-            errorMsg.textContent = message;
-            errorMsg.style.display = 'block';
-            
-            setTimeout(() => {
-                errorMsg.style.display = 'none';
-            }, 6000);
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            displayClasses();
+            renderClasses(); 
             updateStats();
-        });
+        };
 
-        // Make functions globally available
-        window.updateSubjects = updateSubjects;
-        window.createClass = createClass;
-        window.copyCode = copyCode;
-        window.deleteClass = deleteClass;
     </script>
 </body>
 </html>

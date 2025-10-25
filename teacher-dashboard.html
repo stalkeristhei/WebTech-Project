@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Class Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #2a9d8f;
+            --accent-dark: #21867a;
+            --accent-light: #52c2b5;
+            --card-bg: #ffffffd9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-dark);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .option-grid {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .option-card {
+            flex: 1;
+            padding: 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            border: 2px solid #e0e0e0;
+            max-width: 300px;
+        }
+
+        .option-card.saved-class {
+            background: linear-gradient(145deg, #e6fffd, #c7fff8);
+        }
+
+        .option-card.new-class {
+            background: linear-gradient(145deg, #f0f8ff, #dcf0ff);
+        }
+
+        .option-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(42, 157, 143, 0.2);
+            border-color: var(--accent-light);
+        }
+
+        .option-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .option-card p {
+            font-size: 0.95rem;
+            color: #4a4a4a;
+        }
+
+        .logout-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 40px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background: #c9303c;
+        }
+
+        @media (max-width: 600px) {
+            .option-grid {
+                flex-direction: column;
+            }
+            .dashboard-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>👨‍🏫 Teacher Portal</h1>
+            <p>Select an option to manage your attendance data.</p>
+        </div>
+
+        <div class="option-grid">
+            <!-- Option 1: Manage Existing Classes -->
+            <a href="create-class.html" class="option-card saved-class">
+                <span class="icon">📚</span>
+                <h2>Manage Existing Classes</h2>
+                <p>View, edit, or take attendance for your saved courses.</p>
+            </a>
+
+            <!-- Option 2: Create New Class -->
+            <a href="create-class.html#create" class="option-card new-class">
+                <span class="icon">➕</span>
+                <h2>Create New Class</h2>
+                <p>Set up a new course and generate a unique student code.</p>
+            </a>
+        </div>
+
+        <a href="login.html" class="logout-btn">Log Out</a>
+    </div>
+</body>
+</html>
