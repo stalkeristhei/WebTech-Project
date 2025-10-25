@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Management - Teacher Portal</title>
+    <title>Manage Classes - Create</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -160,120 +160,6 @@
             border: 2px solid #fecaca;
         }
 
-        .class-list {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .class-list h2 {
-            color: var(--accent);
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .class-item {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border: 2px solid #e2e8f0;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .class-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .class-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .class-info h3 {
-            color: var(--accent-dark);
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .class-info p {
-            color: #64748b;
-            margin-bottom: 5px;
-            font-size: 0.95rem;
-        }
-
-        .class-code-display {
-            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-            color: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-align: center;
-            min-width: 120px;
-            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
-        }
-
-        .class-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .btn-copy {
-            background: #3b82f6;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-copy:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-
-        .btn-delete {
-            background: var(--error);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-delete:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #64748b;
-        }
-
-        .empty-state h3 {
-            color: var(--accent);
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-
         .stats-row {
             display: flex;
             gap: 15px;
@@ -309,11 +195,6 @@
                 font-size: 2.2rem;
             }
 
-            .class-header {
-                flex-direction: column;
-                gap: 15px;
-            }
-
             .stats-row {
                 flex-direction: column;
             }
@@ -327,12 +208,13 @@
             <p>Create and manage classes with unique access codes</p>
         </div>
         
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a href="teacher-dashboard.html" class="btn" style="background: #f0f0f0; color: var(--accent); padding: 10px 20px; border: 1px solid #ddd;">← Back to Dashboard</a>
+        <div style="text-align: center; margin-bottom: 30px; display: flex; justify-content: center; gap: 15px;">
+            <a href="teacher-dashboard.html" class="btn" style="background: #f0f0f0; color: var(--text); padding: 10px 20px; border: 1px solid #ddd; font-weight: 600; font-size: 1rem;">← Back to Dashboard</a>
+            
+            <a href="manage-class.html" class="btn" style="background: var(--accent); color: white; padding: 10px 20px; border: 1px solid var(--accent); font-weight: 600; font-size: 1rem;">View Created Classes →</a>
         </div>
 
         <div class="main-grid">
-            <!-- Create Class Form -->
             <div class="card">
                 <h2>✨ Create New Class</h2>
                 <form onsubmit="createClass(event)">
@@ -390,7 +272,6 @@
                 </form>
             </div>
 
-            <!-- Quick Stats -->
             <div class="card">
                 <h2>📊 Statistics</h2>
                 <div class="stats-row">
@@ -412,100 +293,45 @@
                 </div>
             </div>
         </div>
-
-        <!-- Classes List -->
-        <div class="class-list">
-            <h2>📋 Created Classes</h2>
-            <div id="classes-container">
-                <div class="empty-state">
-                    <h3>No classes created yet</h3>
-                    <p>Create your first class using the form above to get started</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
-        // Subject mapping for each department
+        // Subject mapping for each department (Retained)
         const departmentSubjects = {
             comp: [
-                'Data Structures and Algorithms',
-                'Computer Programming',
-                'Database Management Systems',
-                'Software Engineering',
-                'Computer Networks',
-                'Operating Systems',
-                'Web Development',
-                'Object Oriented Programming',
-                'Computer Graphics',
-                'Artificial Intelligence',
-                'Machine Learning',
-                'Cybersecurity'
+                'Data Structures and Algorithms', 'Computer Programming', 'Database Management Systems',
+                'Software Engineering', 'Computer Networks', 'Operating Systems',
+                'Web Development', 'Object Oriented Programming', 'Computer Graphics',
+                'Artificial Intelligence', 'Machine Learning', 'Cybersecurity'
             ],
             mech: [
-                'Engineering Mechanics',
-                'Thermodynamics',
-                'Fluid Mechanics',
-                'Manufacturing Technology',
-                'Machine Design',
-                'Heat Transfer',
-                'Materials Science',
-                'Mechanical Vibrations',
-                'Automotive Engineering',
-                'Industrial Engineering',
-                'CAD/CAM',
-                'Robotics'
+                'Engineering Mechanics', 'Thermodynamics', 'Fluid Mechanics',
+                'Manufacturing Technology', 'Machine Design', 'Heat Transfer',
+                'Materials Science', 'Mechanical Vibrations', 'Automotive Engineering',
+                'Industrial Engineering', 'CAD/CAM', 'Robotics'
             ],
             it: [
-                'Information Systems',
-                'Network Security',
-                'Web Technologies',
-                'Database Systems',
-                'Software Testing',
-                'Mobile Application Development',
-                'Cloud Computing',
-                'Data Analytics',
-                'System Administration',
-                'IT Project Management',
-                'Digital Marketing',
-                'E-Commerce'
+                'Information Systems', 'Network Security', 'Web Technologies',
+                'Database Systems', 'Software Testing', 'Mobile Application Development',
+                'Cloud Computing', 'Data Analytics', 'System Administration',
+                'IT Project Management', 'Digital Marketing', 'E-Commerce'
             ],
             ecomp: [
-                'Digital Electronics',
-                'Microprocessors',
-                'Communication Systems',
-                'Control Systems',
-                'VLSI Design',
-                'Embedded Systems',
-                'Signal Processing',
-                'Electronic Circuits',
-                'Computer Architecture',
-                'Robotics',
-                'IoT Systems',
-                'Power Electronics'
+                'Digital Electronics', 'Microprocessors', 'Communication Systems',
+                'Control Systems', 'VLSI Design', 'Embedded Systems',
+                'Signal Processing', 'Electronic Circuits', 'Computer Architecture',
+                'Robotics', 'IoT Systems', 'Power Electronics'
             ],
             civil: [
-                'Structural Engineering',
-                'Concrete Technology',
-                'Surveying',
-                'Geotechnical Engineering',
-                'Transportation Engineering',
-                'Environmental Engineering',
-                'Construction Management',
-                'Hydraulics',
-                'Building Planning',
+                'Structural Engineering', 'Concrete Technology', 'Surveying',
+                'Geotechnical Engineering', 'Transportation Engineering', 'Environmental Engineering',
+                'Construction Management', 'Hydraulics', 'Building Planning',
                 'Earthquake Engineering'
             ],
             electrical: [
-                'Electrical Machines',
-                'Power Systems',
-                'Control Systems',
-                'Electrical Measurements',
-                'Power Electronics',
-                'Electric Drives',
-                'Renewable Energy',
-                'High Voltage Engineering',
-                'Electrical Design',
+                'Electrical Machines', 'Power Systems', 'Control Systems',
+                'Electrical Measurements', 'Power Electronics', 'Electric Drives',
+                'Renewable Energy', 'High Voltage Engineering', 'Electrical Design',
                 'Smart Grid Technology'
             ]
         };
@@ -513,7 +339,7 @@
         // Store classes in localStorage
         let classes = JSON.parse(localStorage.getItem('teacherClasses') || '[]');
 
-        // Utility functions for messages
+        // Utility functions for messages (Retained)
         function clearMessages() {
             document.getElementById('success-msg').style.display = 'none';
             document.getElementById('error-msg').style.display = 'none';
@@ -531,12 +357,10 @@
             successElement.style.display = 'block';
         }
 
-        // Generate unique class code
+        // Generate unique class code (Retained)
         function generateClassCode(department, semester) {
             const deptCode = department.toUpperCase().substring(0, 2);
             const semCode = semester.toString(); 
-
-            // Generate random suffix (3 characters)
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let suffix = '';
             for (let i = 0; i < 3; i++) {
@@ -563,7 +387,7 @@
             return newCode;
         }
 
-        // Update subjects based on selected department
+        // Update subjects based on selected department (Retained)
         function updateSubjects() {
             const departmentSelect = document.getElementById('department');
             const subjectSelect = document.getElementById('subject');
@@ -581,57 +405,7 @@
             }
         }
 
-        // Delete class
-        function deleteClass(classCode) {
-            // Using a custom confirmation function instead of alert/confirm
-            showCustomModal(`Are you sure you want to delete the class with code ${classCode}? This action cannot be undone.`, () => {
-                classes = classes.filter(cls => cls.code !== classCode);
-                localStorage.setItem('teacherClasses', JSON.stringify(classes));
-                renderClasses();
-                updateStats();
-            });
-        }
-        
-        // Custom confirmation modal (basic implementation)
-        function showCustomModal(message, callback) {
-            const modalId = 'confirmationModal';
-            let modal = document.getElementById(modalId);
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = modalId;
-                modal.style.cssText = `
-                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
-                    z-index: 1000;
-                `;
-                modal.innerHTML = `
-                    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 400px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-                        <p id="modal-message" style="margin-bottom: 20px; font-size: 1.1rem;"></p>
-                        <button id="confirm-btn" style="background: var(--error); color: white; border: none; padding: 10px 20px; border-radius: 8px; margin-right: 10px; cursor: pointer;">Delete</button>
-                        <button id="cancel-btn" style="background: #ccc; color: var(--text); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-            }
-            
-            document.getElementById('modal-message').textContent = message;
-            modal.style.display = 'flex';
-
-            const confirmBtn = document.getElementById('confirm-btn');
-            const cancelBtn = document.getElementById('cancel-btn');
-
-            confirmBtn.onclick = () => {
-                modal.style.display = 'none';
-                callback();
-            };
-
-            cancelBtn.onclick = () => {
-                modal.style.display = 'none';
-            };
-        }
-
-
-        // Create new class
+        // Create new class (Retained)
         function createClass(event) {
             event.preventDefault();
             clearMessages();
@@ -689,50 +463,15 @@
             showSuccess(`Class "${subject} - ${section}" created successfully! Code: ${classCode}`);
             event.target.reset(); // Clear form
             document.getElementById('subject').innerHTML = '<option value="">First select a department</option>';
-            renderClasses();
-            updateStats();
+            // No renderClasses here, as the list is on another page now
+            updateStats(); // Update stats on this page
         }
 
-        // Render classes list
-        function renderClasses() {
-            const container = document.getElementById('classes-container');
-            container.innerHTML = ''; 
-
-            if (classes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No classes created yet</h3>
-                        <p>Create your first class using the form above to get started</p>
-                    </div>
-                `;
-                return;
-            }
-
-            classes.forEach(cls => {
-                const classItem = document.createElement('div');
-                classItem.className = 'class-item';
-                classItem.innerHTML = `
-                    <div class="class-header">
-                        <div class="class-info">
-                            <h3>${cls.subject} (${cls.section})</h3>
-                            <p>${cls.departmentName} | Semester ${cls.semester}</p>
-                            <p>Academic Year: ${cls.academicYear}</p>
-                            <p style="margin-top: 10px;">Students Enrolled: <span style="font-weight: 700;">${cls.students}</span></p>
-                        </div>
-                        <div class="class-code-display">${cls.code}</div>
-                    </div>
-                    <div class="class-actions">
-                        <button class="btn-copy" onclick="copyCode('${cls.code}', this)">Copy Code</button>
-                        <button class="btn" style="background: var(--accent); color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.9rem;">View Attendance</button>
-                        <button class="btn-delete" onclick="deleteClass('${cls.code}')">Delete Class</button>
-                    </div>
-                `;
-                container.appendChild(classItem);
-            });
-        }
-
-        // Update statistics
+        // Update statistics (Retained)
         function updateStats() {
+            // Re-load classes to ensure statistics are up to date with new creation
+            classes = JSON.parse(localStorage.getItem('teacherClasses') || '[]');
+
             const totalClassesElement = document.getElementById('total-classes');
             const totalDepartmentsElement = document.getElementById('total-departments');
             const breakdownElement = document.getElementById('department-breakdown');
@@ -758,42 +497,8 @@
             }
         }
 
-        // Copy code to clipboard
-        function copyCode(code, button) {
-            document.execCommand('copy'); // Fallback for older browsers/environments
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                }, 1000);
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
-        }
-
-
-        // Load initial state and event handlers
+        // Load initial state
         window.onload = function() {
-            // *** HANDLE NAVIGATION FROM TEACHER DASHBOARD ***
-            // Check if the URL contains the '#create' hash (from the Dashboard link)
-            if (window.location.hash === '#create') {
-                const createFormCard = document.querySelector('.main-grid > .card:first-child');
-                if (createFormCard) {
-                    // Smooth scroll to the form
-                    createFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    
-                    // Optional: Briefly highlight the form
-                    createFormCard.style.border = '3px solid var(--accent-light)';
-                    createFormCard.style.boxShadow = '0 0 20px rgba(42, 157, 143, 0.5)';
-                    setTimeout(() => {
-                        createFormCard.style.border = '2px solid #e0e0e0'; /* Reset original border */
-                        createFormCard.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.1)';
-                    }, 2000);
-                }
-            }
-            
-            renderClasses(); 
             updateStats();
         };
 

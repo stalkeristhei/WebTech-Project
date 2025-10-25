@@ -197,13 +197,11 @@
             <h1>📊 Attendance Login</h1>
             <p>Choose your role to get started</p>
         </div>
-            <!-- Role Selector -->
             <div class="role-selector">
                 <button class="role-btn active" onclick="switchRole('teacher')">👨‍🏫 Teacher</button>
                 <button class="role-btn" onclick="switchRole('student')">👨‍🎓 Student</button>
             </div>
 
-        <!-- Teacher Login Form -->
         <div class="form-container active" id="teacher-form">
             <form onsubmit="handleTeacherLogin(event)">
                 <div class="form-group">
@@ -223,7 +221,6 @@
             </form>
         </div>
 
-        <!-- Student Login Form -->
         <div class="form-container" id="student-form">
             <form onsubmit="handleStudentLogin(event)">
                 <div class="form-group">
@@ -307,7 +304,6 @@
 
             setTimeout(() => {
                 // Simulate successful login
-                // window.alert('Teacher login successful! Redirecting to Dashboard.'); // Using alert() is forbidden
                 
                 // Show a temporary success message instead of alert
                 showSuccess('teacher-email-error', 'Login successful! Redirecting...');
@@ -321,7 +317,7 @@
             }, 1500);
         }
 
-        // Student login handler (unchanged)
+        // Student login handler (MODIFIED)
         function handleStudentLogin(event) {
             event.preventDefault();
             clearErrorMessages();
@@ -356,10 +352,10 @@
                 const validCodes = ['ABC123', 'XYZ789', 'DEF456'];
                 
                 if (validCodes.includes(classCode.toUpperCase())) {
-                    showSuccess('class-code-success', 'Class found! Joining...');
-                    // window.alert(`Welcome ${name}! You have successfully joined the class.`); // Using alert() is forbidden
-                    // Redirect to student dashboard (mocked)
-                    // window.location.href = 'student-dashboard.html';
+                    showSuccess('class-code-success', 'Class found! Redirecting to student dashboard...');
+                    
+                    // 🚀 REDIRECT TO SINDEX.HTML ON SUCCESS
+                    window.location.href = 'sindex.html';
                 } else {
                     showError('class-code-error', 'Invalid class code. Please check with your teacher.');
                 }

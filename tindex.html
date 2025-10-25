@@ -1,189 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Attendance Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --background: #fdfaf6;
-      --text: #1e1e1e;
-      --accent: #a47148;
-      --accent-light: #d8b4a0;
-      --card-bg: #ffffffd9;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- Custom Styles to Match the Aesthetic of the Student Attendance Tracker Image --- */
+        
+        :root {
+            /* Matching the image's earthy/light color palette */
+            --bg-color: #fdfaf6;
+            --text-color: #1e1e1e;
+            --accent-color: #a47148; /* Main Accent */
+            --accent-light: #d8b4a0;
+            --card-bg-color: #ffffffd9;
+            --card-shadow: 0 6px 16px rgba(80, 36, 20, 0.2);
+            --card-shadow-hover: 0 10px 20px rgba(80, 36, 20, 0.8);
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+            /* Matching the border colors from the image */
+            --border-present: #6a994e;
+            --border-absent: #bc4749;
+            --border-action: #a47148;
+            --btn-bg: #f1e0d0;
+            --btn-hover: #d8b4a0;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--background);
-      
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
 
-    header {
-      width: 100%;
-      max-width: 1200px;
-      text-align: center;
-      margin-bottom: 40px;
-    }
+        /* Utility class override to apply card styling */
+        .dashboard-card-style {
+            background: var(--card-bg-color);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    header h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
+        .dashboard-card-style:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--card-shadow-hover);
+        }
 
-    header p {
-      font-size: 1.1rem;
-      color: #5c4b42;
-    }
+        /* Base Button Style (for Home/About/Logout) */
+        .nav-btn {
+            background-color: var(--btn-bg);
+            color: var(--accent-color);
+            border: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+        }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin: 20px 0 50px 0;
-    }
+        /* Specific card border colors */
+        .card-mark { border-color: var(--border-action); } /* Matches History/Brown */
+        .card-present { border-color: var(--border-present); } /* Matches Present/Green */
+        .card-absent { border-color: var(--border-absent); } /* Matches Absent/Red */
+        
+        /* Matching the Title style */
+        .main-title {
+            color: var(--accent-color);
+        }
 
-    nav button {
-      background-color: #f1e0d0;
-      border: none;
-      padding: 10px 20px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      color: var(--accent);
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
+        /* Matching the subtitle/footer color */
+        .sub-text {
+             color: #5c4b42;
+        }
 
-    nav button:hover {
-      background-color: var(--accent-light);
-      transform: translateY(-2px);
-    }
-
-    .card-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 40px;
-      justify-content: center;
-      width: 100%;
-      max-width: 1000px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 14px;
-      padding: 30px 35px;
-      text-align: left;
-      flex: 1 1 250px;
-      min-width: 250px;
-      max-width: 300px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 6px 16px rgba(80, 36, 20, 0.2);
-      border: 2px solid transparent;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(80, 36, 20, 0.8);
-    }
-
-    .card span.icon {
-      font-size: 2.2rem;
-      display: block;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .present { border-color: #6a994e; }
-    .absent  { border-color: #bc4749; }
-    .history { border-color: #a47148; }
-
-    footer {
-      margin-top: 60px;
-      font-size: 0.9rem;
-      color: #8b6e5f;
-      opacity: 0.8;
-      font-style: italic;
-    }
-
-    @media (max-width: 700px) {
-      header h1 {
-        font-size: 2.3rem;
-      }
-
-      .card {
-        padding: 25px 28px;
-      }
-
-      .card-title {
-        font-size: 1.15rem;
-      }
-
-      .card span.icon {
-        font-size: 1.8rem;
-      }
-
-      .card-container {
-        gap: 25px;
-      }
-    }
-  </style>
+        /* Added style for the new button if needed, although .nav-btn handles it */
+        .nav-btn-alt {
+            background-color: #a47148; /* Use a stronger color for the new button */
+            color: white;
+        }
+        .nav-btn-alt:hover {
+            background-color: #8b6e5f;
+            transform: translateY(-2px);
+        }
+        
+    </style>
 </head>
-<body>
 
-  <header>
-    <h1>📊Student Attendance Tracker</h1>
-    <p>Student Attendance Tracker With Precision and Professionalism</p>
-  </header>
+<body class="min-h-screen flex flex-col items-center p-10">
 
-  <nav>
-    <button onclick="window.location.reload()">🏠 Home</button>
-    <button onclick="location.href='about.html'">ℹ️ About</button>
-  </nav>
+    <header class="text-center mb-8 max-w-4xl">
+        <h1 class="text-5xl font-extrabold main-title flex items-center justify-center gap-3 mb-2">
+            👨‍🏫 Teacher Dashboard
+        </h1>
+        <p class="text-xl sub-text">
+            Manage Class Attendance and Access Student Information
+        </p>
+    </header>
 
-  <div class="card-container">
-    <div class="card present" onclick="location.href='present.html'">
-      <span class="icon">✅</span>
-      <div class="card-title">Present Today</div>
+    <nav class="flex justify-center gap-4 mb-10">
+        <button onclick="window.location.href='teacher-dashboard.html'" class="nav-btn-alt py-2 px-4 font-semibold rounded-lg text-lg shadow-sm">
+            🖥️ Dashboard
+        </button>
+
+        <button onclick="window.location.href='index.html'" class="nav-btn py-2 px-4 font-semibold rounded-lg text-lg shadow-sm">
+            🏠 Home
+        </button>
+        <button onclick="window.location.href='about.html'" class="nav-btn py-2 px-4 font-semibold rounded-lg text-lg shadow-sm">
+            ℹ️ About
+        </button>
+        
+        <button onclick="logoutAndRedirect()" class="nav-btn py-2 px-4 font-semibold rounded-lg text-lg shadow-sm">
+            🚪 Logout
+        </button>
+    </nav>
+
+
+    <div class="flex flex-wrap justify-center gap-10 w-full max-w-6xl">
+        
+        <a href="tattendance.html" 
+           class="dashboard-card-style card-mark flex flex-col items-center p-8 rounded-2xl cursor-pointer border-2 w-full md:w-72 lg:w-80 h-48 justify-center text-center">
+            <span class="text-5xl mb-2">📝</span>
+            <div class="text-2xl font-bold">Mark Attendance</div>
+            <span class="text-sm sub-text mt-1 opacity-75">(Today's Roll Call)</span>
+        </a>
+
+        <a href="compresent.html" 
+           class="dashboard-card-style card-present flex flex-col items-center p-8 rounded-2xl cursor-pointer border-2 w-full md:w-72 lg:w-80 h-48 justify-center text-center">
+            <span class="text-5xl mb-2">✅</span>
+            <div class="text-2xl font-bold">View Present List</div>
+            <span class="text-sm sub-text mt-1 opacity-75">(Current Tally)</span>
+        </a>
+
+        <a href="comabsent.html" 
+           class="dashboard-card-style card-absent flex flex-col items-center p-8 rounded-2xl cursor-pointer border-2 w-full md:w-72 lg:w-80 h-48 justify-center text-center">
+            <span class="text-5xl mb-2">❌</span>
+            <div class="text-2xl font-bold">View Absent List</div>
+            <span class="text-sm sub-text mt-1 opacity-75">(Students Absent)</span>
+        </a>
     </div>
-    <div class="card absent" onclick="location.href='absent.html'">
-      <span class="icon">❌</span>
-      <div class="card-title">Absent Today</div>
-    </div>
-    <div class="card history" onclick="location.href='attendance.html'">
-      <span class="icon">📅</span>
-      <div class="card-title">Last 10 Days</div>
-    </div>
-  </div>
-  <footer>
-    &copy; 2025 Attendance Portal — A Web Technology Project
-  </footer>
 
+    <footer class="mt-20 text-sm sub-text opacity-75 italic">
+        © 2025 Teacher Portal — A Management System Project
+    </footer>
+
+    <script>
+        // --- LOGOUT FUNCTION MODIFIED TO REDIRECT TO login.html ---
+        window.logoutAndRedirect = function() {
+            localStorage.removeItem('userRole');
+            console.log('Teacher logged out and redirecting.');
+            window.location.href = 'login.html'; 
+        };
+        
+        // --- ROLE CHECK (Retained for functionality) ---
+        const requiredRole = 'teacher';
+        const userRole = localStorage.getItem('userRole');
+
+        if (userRole && userRole !== requiredRole) {
+            console.warn('User role conflict detected. Would redirect.');
+            // window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>
