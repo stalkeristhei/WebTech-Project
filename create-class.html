@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Class - Teacher Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfaf6;
+            --text: #1e1e1e;
+            --accent: #2a9d8f;
+            --accent-dark: #21867a;
+            --accent-light: #52c2b5;
+            --card-bg: #ffffffd9;
+            --error: #e63946;
+            --success: #6a994e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: var(--success);
+            border: 2px solid #bbf7d0;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: var(--error);
+            border: 2px solid #fecaca;
+        }
+
+        .class-list {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .class-list h2 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .class-item {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .class-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .class-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .class-info h3 {
+            color: var(--accent-dark);
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .class-info p {
+            color: #64748b;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .class-code-display {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+        }
+
+        .class-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-copy {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-copy:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            background: var(--error);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+
+        .empty-state h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .class-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Teacher Class Portal</h1>
+            <p>Create and manage classes with unique access codes</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Create Class Form -->
+            <div class="card">
+                <h2>✨ Create New Class</h2>
+                <form onsubmit="createClass(event)">
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <select id="department" required onchange="updateSubjects()">
+                            <option value="">Select Department</option>
+                            <option value="comp">Computer Engineering</option>
+                            <option value="mech">Mechanical Engineering</option>
+                            <option value="it">Information Technology</option>
+                            <option value="ecomp">Electronics & Computer Engineering</option>
+                            <option value="civil">Civil Engineering</option>
+                            <option value="electrical">Electrical Engineering</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" required>
+                            <option value="">First select a department</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="semester">Semester</label>
+                        <select id="semester" required>
+                            <option value="">Select Semester</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="section">Section/Division</label>
+                        <input type="text" id="section" placeholder="e.g., A, B, C" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="academic-year">Academic Year</label>
+                        <input type="text" id="academic-year" placeholder="e.g., 2024-25" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        🎯 Create Class & Generate Code
+                    </button>
+
+                    <div class="message success-message" id="success-msg"></div>
+                    <div class="message error-message" id="error-msg"></div>
+                </form>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <h2>📊 Statistics</h2>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-classes">0</div>
+                        <div class="stat-label">Active Classes</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-departments">0</div>
+                        <div class="stat-label">Departments</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <h3 style="color: var(--accent); margin-bottom: 15px;">📚 Subjects by Department</h3>
+                    <div id="department-breakdown">
+                        <p style="color: #64748b; font-style: italic;">Create classes to see breakdown</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classes List -->
+        <div class="class-list">
+            <h2>📋 Created Classes</h2>
+            <div id="classes-container">
+                <div class="empty-state">
+                    <h3>No classes created yet</h3>
+                    <p>Create your first class using the form above to get started</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Subject mapping for each department
+        const departmentSubjects = {
+            comp: [
+                'Data Structures and Algorithms',
+                'Computer Programming',
+                'Database Management Systems',
+                'Software Engineering',
+                'Computer Networks',
+                'Operating Systems',
+                'Web Development',
+                'Object Oriented Programming',
+                'Computer Graphics',
+                'Artificial Intelligence',
+                'Machine Learning',
+                'Cybersecurity'
+            ],
+            mech: [
+                'Engineering Mechanics',
+                'Thermodynamics',
+                'Fluid Mechanics',
+                'Manufacturing Technology',
+                'Machine Design',
+                'Heat Transfer',
+                'Materials Science',
+                'Mechanical Vibrations',
+                'Automotive Engineering',
+                'Industrial Engineering',
+                'CAD/CAM',
+                'Robotics'
+            ],
+            it: [
+                'Information Systems',
+                'Network Security',
+                'Web Technologies',
+                'Database Systems',
+                'Software Testing',
+                'Mobile Application Development',
+                'Cloud Computing',
+                'Data Analytics',
+                'System Administration',
+                'IT Project Management',
+                'Digital Marketing',
+                'E-Commerce'
+            ],
+            ecomp: [
+                'Digital Electronics',
+                'Microprocessors',
+                'Communication Systems',
+                'Control Systems',
+                'VLSI Design',
+                'Embedded Systems',
+                'Signal Processing',
+                'Electronic Circuits',
+                'Computer Architecture',
+                'Robotics',
+                'IoT Systems',
+                'Power Electronics'
+            ],
+            civil: [
+                'Structural Engineering',
+                'Concrete Technology',
+                'Surveying',
+                'Geotechnical Engineering',
+                'Transportation Engineering',
+                'Environmental Engineering',
+                'Construction Management',
+                'Hydraulics',
+                'Building Planning',
+                'Earthquake Engineering'
+            ],
+            electrical: [
+                'Electrical Machines',
+                'Power Systems',
+                'Control Systems',
+                'Electrical Measurements',
+                'Power Electronics',
+                'Electric Drives',
+                'Renewable Energy',
+                'High Voltage Engineering',
+                'Electrical Design',
+                'Smart Grid Technology'
+            ]
+        };
+
+        // Store classes in localStorage
+        let classes = JSON.parse(localStorage.getItem('teacherClasses') || '[]');
+
+        // Generate unique class code based on department and subject
+        function generateClassCode(department, subject, semester) {
+            // Create base code from department and semester
+            const deptCode = department.toUpperCase().substring(0, 2);
+            const subjectCode = subject.replace(/\s+/g, '').substring(0, 3).toUpperCase();
+            const semCode = semester.toString().padStart(2, '0');
+            
+            // Generate random suffix
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let suffix = '';
+            for (let i = 0; i < 2; i++) {
+                suffix += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            const baseCode = `${deptCode}${subjectCode}${semCode}${suffix}`;
+            
+            // Ensure uniqueness
+            const exists = classes.some(cls => cls.code === baseCode);
+            if (exists) {
+                return generateClassCode(department, subject, semester); // Retry
+            }
+            
+            return baseCode;
+        }
+
+        // Update subjects based on selected department
+        function updateSubjects() {
+            const departmentSelect = document.getElementById('department');
+            const subjectSelect = document.getElementById('subject');
+            const selectedDept = departmentSelect.value;
+
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+
+            if (selectedDept && departmentSubjects[selectedDept]) {
+                departmentSubjects[selectedDept].forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Create new class
+        function createClass(event) {
+            event.preventDefault();
+            clearMessages();
+
+            const department = document.getElementById('department').value;
+            const subject = document.getElementById('subject').value;
+            const semester = document.getElementById('semester').value;
+            const section = document.getElementById('section').value.trim();
+            const academicYear = document.getElementById('academic-year').value.trim();
+
+            // Validation
+            if (!department || !subject || !semester || !section || !academicYear) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            // Check for duplicate class
+            const duplicate = classes.find(cls => 
+                cls.department === department && 
+                cls.subject === subject && 
+                cls.semester === semester && 
+                cls.section.toLowerCase() === section.toLowerCase() &&
+                cls.academicYear === academicYear
+            );
+
+            if (duplicate) {
+                showError('This class already exists! Please check the details.');
+                return;
+            }
+
+            // Generate unique class code
+            const classCode = generateClassCode(department, subject, semester);
+            
+            const newClass = {
+                id: Date.now(),
+                department: department,
+                subject: subject,
+                semester: parseInt(semester),
+                section: section,
+                academicYear: academicYear,
+                code: classCode,
+                created: new Date().toLocaleDateString(),
+                students: []
+            };
+
+            classes.push(newClass);
+            localStorage.setItem('teacherClasses', JSON.stringify(classes));
+
+            showSuccess(`Class created successfully!\nClass Code: ${classCode}\nShare this code with your students to join the class.`);
+            
+            // Reset form
+            event.target.reset();
+            
+            // Refresh display
+            displayClasses();
+            updateStats();
+        }
+
+        // Display all classes
+        function displayClasses() {
+            const container = document.getElementById('classes-container');
+            
+            if (classes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No classes created yet</h3>
+                        <p>Create your first class using the form above to get started</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = classes.map(cls => {
+                const deptName = getDepartmentName(cls.department);
+                return `
+                    <div class="class-item">
+                        <div class="class-header">
+                            <div class="class-info">
+                                <h3>${cls.subject}</h3>
+                                <p><strong>Department:</strong> ${deptName}</p>
+                                <p><strong>Semester:</strong> ${cls.semester} | <strong>Section:</strong> ${cls.section}</p>
+                                <p><strong>Academic Year:</strong> ${cls.academicYear}</p>
+                                <p><strong>Created:</strong> ${cls.created} | <strong>Students:</strong> ${cls.students.length}</p>
+                            </div>
+                            <div class="class-code-display">${cls.code}</div>
+                        </div>
+                        <div class="class-actions">
+                            <button class="btn-copy" onclick="copyCode('${cls.code}')">
+                                📋 Copy Code
+                            </button>
+                            <button class="btn-delete" onclick="deleteClass(${cls.id})">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalClasses = classes.length;
+            const departments = [...new Set(classes.map(cls => cls.department))];
+            
+            document.getElementById('total-classes').textContent = totalClasses;
+            document.getElementById('total-departments').textContent = departments.length;
+
+            // Department breakdown
+            const breakdown = document.getElementById('department-breakdown');
+            if (departments.length === 0) {
+                breakdown.innerHTML = '<p style="color: #64748b; font-style: italic;">Create classes to see breakdown</p>';
+            } else {
+                const deptCounts = departments.map(dept => {
+                    const count = classes.filter(cls => cls.department === dept).length;
+                    const name = getDepartmentName(dept);
+                    return `<p><strong>${name}:</strong> ${count} class${count !== 1 ? 'es' : ''}</p>`;
+                }).join('');
+                breakdown.innerHTML = deptCounts;
+            }
+        }
+
+        // Get department full name
+        function getDepartmentName(deptCode) {
+            const names = {
+                comp: 'Computer Engineering',
+                mech: 'Mechanical Engineering',
+                it: 'Information Technology',
+                ecomp: 'Electronics & Computer Engineering',
+                civil: 'Civil Engineering',
+                electrical: 'Electrical Engineering'
+            };
+            return names[deptCode] || deptCode;
+        }
+
+        // Copy class code to clipboard
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert(`✅ Class code "${code}" copied to clipboard!\nShare this with your students.`);
+            }).catch(() => {
+                prompt('Copy this class code:', code);
+            });
+        }
+
+        // Delete class
+        function deleteClass(classId) {
+            const classToDelete = classes.find(cls => cls.id === classId);
+            if (!classToDelete) return;
+
+            if (confirm(`Are you sure you want to delete "${classToDelete.subject}" class?\nThis action cannot be undone.`)) {
+                classes = classes.filter(cls => cls.id !== classId);
+                localStorage.setItem('teacherClasses', JSON.stringify(classes));
+                
+                displayClasses();
+                updateStats();
+                showSuccess('Class deleted successfully!');
+            }
+        }
+
+        // Message functions
+        function clearMessages() {
+            document.getElementById('success-msg').style.display = 'none';
+            document.getElementById('error-msg').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successMsg = document.getElementById('success-msg');
+            successMsg.textContent = message;
+            successMsg.style.display = 'block';
+            
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 8000);
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 6000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayClasses();
+            updateStats();
+        });
+
+        // Make functions globally available
+        window.updateSubjects = updateSubjects;
+        window.createClass = createClass;
+        window.copyCode = copyCode;
+        window.deleteClass = deleteClass;
+    </script>
+</body>
+</html>
