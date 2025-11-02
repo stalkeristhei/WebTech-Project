@@ -3,164 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Class Selection</title>
+    <title>Teacher Dashboard - Smart Attendance System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #fdfaf6;
-            --text: #1e1e1e;
-            --accent: #2a9d8f;
+            --bg-primary: #f8f9fa;
+            --text-primary: #212529;
+            --accent-primary: #2a9d8f;
             --accent-dark: #21867a;
-            --accent-light: #52c2b5;
-            --card-bg: #ffffffd9;
+            --card-bg: #ffffff;
+            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+            --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
-
-        .dashboard-container {
+        .navbar {
             background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 700px;
-            padding: 40px;
+            box-shadow: var(--shadow-light);
+            padding: 1rem 2rem;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
+        .logout-btn {
+            background: transparent; color: var(--accent-primary);
+            border: 1px solid var(--accent-primary);
+            padding: 0.5rem 1.25rem; border-radius: 50px;
+            font-weight: 600; cursor: pointer; text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover { background: var(--accent-primary); color: white; }
+        .dashboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
             text-align: center;
         }
-
-        .header {
-            margin-bottom: 40px;
-        }
-
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: var(--accent-dark);
             margin-bottom: 10px;
         }
-
-        .header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .option-grid {
-            display: flex;
-            gap: 25px;
-            justify-content: center;
-        }
-
+        .header p { font-size: 1.2rem; color: #6c757d; margin-bottom: 3rem; }
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .option-card {
-            flex: 1;
-            padding: 30px;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
             text-decoration: none;
-            color: var(--text);
-            border: 2px solid #e0e0e0;
-            max-width: 300px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-primary);
         }
-
-        .option-card.saved-class {
-            background: linear-gradient(145deg, #e6fffd, #c7fff8);
-        }
-
-        .option-card.new-class {
-            background: linear-gradient(145deg, #f0f8ff, #dcf0ff);
-        }
-
         .option-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(42, 157, 143, 0.2);
-            border-color: var(--accent-light);
+            box-shadow: var(--shadow-medium);
         }
-
-        .option-card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .option-card .icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            display: block;
+            font-size: 3.5rem; display: block;
+            margin-bottom: 20px; color: var(--accent-primary);
         }
-
-        .option-card p {
-            font-size: 0.95rem;
-            color: #4a4a4a;
-        }
-
-        .logout-btn {
-            background: #e63946;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-top: 40px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .logout-btn:hover {
-            background: #c9303c;
-        }
-
-        @media (max-width: 600px) {
-            .option-grid {
-                flex-direction: column;
-            }
-            .dashboard-container {
-                padding: 30px;
-            }
+        .option-card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .option-card p { font-size: 1rem; color: #6c757d; line-height: 1.6; }
+        @media (max-width: 768px) {
+            .option-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">👨‍🏫 Teacher Portal</div>
+            <a href="login.html" class="logout-btn">Log Out</a>
+        </div>
+    </nav>
     <div class="dashboard-container">
         <div class="header">
-            <h1>👨‍🏫 Teacher Portal</h1>
-            <p>Select an option to manage your attendance data.</p>
+            <h1 id="welcome-message">Welcome!</h1>
+            <p>What would you like to do today?</p>
         </div>
-
         <div class="option-grid">
-            <a href="manage-class.html" class="option-card saved-class">
+            <a href="manage-class.html" class="option-card">
                 <span class="icon">📚</span>
-                <h2>Manage Existing Classes</h2>
+                <h2>Manage Classes</h2>
                 <p>View, edit, or take attendance for your saved courses.</p>
             </a>
-
-            <a href="create-class.html" class="option-card new-class">
+            <a href="create-class.html" class="option-card">
                 <span class="icon">➕</span>
                 <h2>Create New Class</h2>
                 <p>Set up a new course and generate a unique student code.</p>
             </a>
         </div>
-
-        <a href="login.html" class="logout-btn">Log Out</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const teacherName = localStorage.getItem('teacherName');
+            if (teacherName) {
+                document.getElementById('welcome-message').textContent = `Welcome, ${teacherName}!`;
+            } else {
+                // If no user info, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
 </body>
 </html>

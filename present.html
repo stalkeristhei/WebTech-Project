@@ -1,146 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Present Today</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #fdfaf6;
-      --text: #1e1e1e;
-      --accent: #6a994e;
-      --accent-dark: #527c3e;
-      --header-bg: #2c3e50;
-      --card-bg: #ffffffd9;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-    }
-
-    header {
-      background: var(--header-bg);
-      color: #fff;
-      padding: 25px 0;
-      font-size: 2.5rem;
-      font-weight: 700;
-      text-align: center;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 900px;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-    }
-
-    .nav-home {
-      display: inline-block;
-      margin: 30px 0 40px 0;
-      padding: 12px 24px;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: all 0.25s ease;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .nav-home:hover {
-      background: var(--accent-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    table {
-      width: 90%;
-      max-width: 900px;
-      border-collapse: collapse;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-      transition: transform 0.2s ease;
-    }
-
-    table:hover {
-      transform: scale(1.01);
-    }
-
-    th,
-    td {
-      padding: 16px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-      font-size: 1rem;
-    }
-
-    th {
-      background: var(--accent);
-      color: #fff;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover {
-      background: #f7f3ed;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: #8b6e5f;
-      opacity: 0.8;
-      font-style: italic;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        font-size: 2rem;
-      }
-
-      .nav-home {
-        font-size: 0.95rem;
-        padding: 10px 20px;
-      }
-
-      table {
-        font-size: 0.9rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Students - Smart Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./config.js"></script>
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --text-primary: #212529;
+            --accent-primary: #28a745;
+            --accent-dark: #218838;
+            --card-bg: #ffffff;
+            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+        .header p { font-size: 1.1rem; color: #6c757d; }
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;}
+        .date-filter { background: var(--card-bg); padding: 0.5rem; border-radius: 10px; box-shadow: var(--shadow-light); }
+        .date-filter input { font-size: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 8px; }
+        .nav-btn {
+            background: var(--accent-dark); color: white; padding: 0.75rem 1.5rem;
+            border-radius: 50px; text-decoration: none; font-weight: 600; transition: background-color 0.2s;
+        }
+        .nav-btn:hover { background: #1e7e34; }
+        .table-container { background: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow-light); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+        .status-badge {
+            background-color: #d4edda; color: #155724;
+            padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Present List</h1>
+            <p>Students marked as present in this class on the selected date.</p>
+        </div>
+        <div class="controls">
+            <div class="date-filter">
+                <input type="date" id="dateFilter">
+            </div>
+            <a id="back-link" href="#" class="nav-btn">← Back to Class Dashboard</a>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Time Marked</th>
+                    </tr>
+                </thead>
+                <tbody id="presentTableBody">
+                    <tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-  <header>✅ Present Today</header>
+    <script type="module">
+        import { getSupabase } from './js/supabase-init.js';
+        const supabase = await getSupabase();
+        
+        // ** THE FIX IS HERE **
+        const activeClassCode = localStorage.getItem('activeClassCode');
+        const activeClassId = localStorage.getItem('activeClassId');
 
-  <!-- ✅ Fixed Home button link -->
-  <a class="nav-home" href="index.html">🏠 Home</a>
-  <footer>
-    &copy; 2025 Attendance Portal — A Web Technology Project.
-  </footer>
+        const dateFilter = document.getElementById('dateFilter');
+        dateFilter.value = new Date().toISOString().split('T')[0];
 
+        // Set the back link dynamically so it remembers which class you were viewing
+        document.getElementById('back-link').href = `class-view.html?classId=${activeClassId}&classCode=${activeClassCode}`;
+
+        async function fetchPresentStudents() {
+            if (!activeClassCode) {
+                // This alert is the one you were seeing.
+                alert("Could not find class code. Please go back and select a class.");
+                window.location.href = 'sindex.html';
+                return;
+            }
+            const selectedDate = dateFilter.value;
+            const tableBody = document.getElementById('presentTableBody');
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading...</td></tr>`;
+
+            // Note: In a larger app, you would also filter the student_log by class ID
+            // For now, this shows all present students on a given day, which works for viewing.
+            const { data, error } = await supabase
+                .from('student_log')
+                .select(`"Roll Number", "Name", created_at`)
+                .eq('Date', selectedDate)
+                .eq('Status', 'Present');
+
+            tableBody.innerHTML = '';
+            if (error || data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem;">No students were marked present for this date.</td></tr>`;
+                return;
+            }
+
+            data.forEach(student => {
+                const row = document.createElement('tr');
+                const time = new Date(student.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                row.innerHTML = `
+                    <td>${student['Roll Number']}</td>
+                    <td>${student.Name}</td>
+                    <td><span class="status-badge">Present</span></td>
+                    <td>${time}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        dateFilter.addEventListener('change', fetchPresentStudents);
+        fetchPresentStudents();
+    </script>
 </body>
-
 </html>

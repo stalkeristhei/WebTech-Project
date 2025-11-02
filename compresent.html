@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Present Report - Teacher View</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="./config.js"></script>
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --text-primary: #212529;
+            --accent-primary: #28a745;
+            --accent-dark: #218838;
+            --card-bg: #ffffff;
+            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: var(--shadow-light); }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+        .stat-label { font-size: 1rem; color: #6c757d; }
+        .table-container { background: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow-light); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th { background-color: #f8f9fa; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Present Students Report</h1>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div id="total-present" class="stat-number">0</div>
+                <div class="stat-label">Total Present</div>
+            </div>
+            <div class="stat-card">
+                <div id="attendance-rate" class="stat-number">0%</div>
+                <div class="stat-label">Attendance Rate</div>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Time Marked</th>
+                    </tr>
+                </thead>
+                <tbody id="presentTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script type="module">
+        import { getSupabase } from './js/supabase-init.js';
+        const supabase = await getSupabase();
+        
+        // In a real app, you would pass the class_id here, perhaps via URL param
+        // For now, it shows all present students for simplicity
+        async function loadReport() {
+            const { data, error } = await supabase.from('student_log').select('*').eq('Status', 'Present').eq('Date', new Date().toISOString().split('T')[0]);
+            
+            if (error) return;
+
+            document.getElementById('total-present').textContent = data.length;
+            
+            const tableBody = document.getElementById('presentTableBody');
+            data.forEach(s => {
+                const row = document.createElement('tr');
+                const time = new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                row.innerHTML = `<td>${s['Roll Number']}</td><td>${s.Name}</td><td>${time}</td>`;
+                tableBody.appendChild(row);
+            });
+        }
+        loadReport();
+    </script>
+</body>
+</html>

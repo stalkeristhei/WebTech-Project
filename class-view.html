@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Class - Smart Attendance System</title>
+    <title>Class View - Smart Attendance</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,12 +15,7 @@
             --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
             --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
         }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
         .navbar {
             background: var(--card-bg);
             box-shadow: var(--shadow-light);
@@ -43,13 +38,13 @@
         }
         .logout-btn:hover { background: var(--accent-primary); color: white; }
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 4rem 2rem;
             text-align: center;
         }
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: var(--accent-dark);
             margin-bottom: 10px;
@@ -63,12 +58,12 @@
             display: inline-block;
         }
         .header p { font-size: 1.2rem; color: #6c757d; margin-bottom: 3rem; }
-        .option-grid {
+        .card-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
         }
-        .option-card {
+        .card {
             background: var(--card-bg);
             padding: 40px;
             border-radius: 20px;
@@ -78,26 +73,9 @@
             transition: all 0.3s ease;
             border-top: 4px solid var(--accent-primary);
         }
-        .option-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-medium);
-        }
-        .option-card .icon {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 1.5rem;
-            color: var(--accent-primary);
-        }
-        .option-card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .option-card p {
-            font-size: 1rem;
-            color: #6c757d;
-            line-height: 1.6;
-        }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); }
+        .card .icon { font-size: 3.5rem; display: block; margin-bottom: 1.5rem; color: var(--accent-primary); }
+        .card-title { font-size: 1.5rem; font-weight: 600; }
         .back-link {
             display: inline-block;
             margin-top: 3rem;
@@ -111,66 +89,50 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">📊 Attendance Hub</div>
+            <div class="nav-brand">👨‍🎓 Class Dashboard</div>
             <a href="login.html" class="logout-btn">Log Out</a>
         </div>
     </nav>
-
     <div class="container">
         <div class="header">
-            <h1>Managing Class: <span id="class-code-display">...</span></h1>
-            <p>Select an action for this class.</p>
+            <h1>Class: <span id="class-code-display">...</span></h1>
+            <p>View attendance reports for this class.</p>
         </div>
-        <div class="option-grid">
-            <a id="mark-attendance-link" href="#" class="option-card">
-                <span class="icon">📝</span>
-                <h2>Mark Attendance</h2>
-                <p>Take today's roll call and mark students present.</p>
-            </a>
-            <a id="present-report-link" href="#" class="option-card">
+        <div class="card-container">
+            <a href="present.html" class="card">
                 <span class="icon">✅</span>
-                <h2>Present Report</h2>
-                <p>View a list of all students marked as present.</p>
+                <div class="card-title">Present List</div>
             </a>
-            <a id="absent-report-link" href="#" class="option-card">
+            <a href="absent.html" class="card">
                 <span class="icon">❌</span>
-                <h2>Absent Report</h2>
-                <p>See which students are absent and need follow-up.</p>
+                <div class="card-title">Absent List</div>
+            </a>
+            <a href="sattendance.html" class="card">
+                <span class="icon">📊</span>
+                <div class="card-title">My Summary</div>
             </a>
         </div>
-        <a href="manage-class.html" class="back-link">← Back to My Classes</a>
+        <a href="sindex.html" class="back-link">← Back to All Classes</a>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Get the class code from the URL parameter
             const params = new URLSearchParams(window.location.search);
+            const classId = params.get('classId');
             const classCode = params.get('classCode');
 
-            if (!classCode) {
-                alert('No class selected. Redirecting to your class list.');
-                window.location.href = 'manage-class.html';
+            if (!classId || !classCode) {
+                alert('No class selected.');
+                window.location.href = 'sindex.html';
                 return;
             }
 
-            // Store the classCode in localStorage so other pages can use it
+            // ** THE FIX IS HERE **
+            // We set the *active* class in localStorage so the report pages know which one to use.
+            localStorage.setItem('activeClassId', classId);
             localStorage.setItem('activeClassCode', classCode);
 
-            // Update the UI
             document.getElementById('class-code-display').textContent = classCode;
-
-            // Dynamically set the links for the action cards
-            document.getElementById('mark-attendance-link').href = `tattendance.html`;
-            document.getElementById('present-report-link').href = `compresent.html`;
-            document.getElementById('absent-report-link').href = `comabsent.html`;
-
-            // Logout functionality
-            document.querySelector('.logout-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.clear();
-                alert('You have been logged out.');
-                window.location.href = 'login.html';
-            });
         });
     </script>
 </body>
