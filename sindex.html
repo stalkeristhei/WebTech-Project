@@ -1,208 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - Smart Attendance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="./config.js"></script>
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
-        .navbar {
-            background: var(--card-bg);
-            box-shadow: var(--shadow-light);
-            padding: 1rem 2rem;
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
-        .logout-btn {
-            background: transparent; color: var(--accent-primary);
-            border: 1px solid var(--accent-primary);
-            padding: 0.5rem 1.25rem; border-radius: 50px;
-            font-weight: 600; cursor: pointer; text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .logout-btn:hover { background: var(--accent-primary); color: white; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-        .header { margin-bottom: 2.5rem; }
-        .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
-        .main-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-        .classes-section h2, .join-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary); }
-        #class-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-        .class-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--shadow-light);
-            border-left: 5px solid var(--accent-primary);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.2s ease-in-out;
-        }
-        .class-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .class-card h3 { font-size: 1.2rem; color: var(--accent-dark); margin-bottom: 5px; }
-        .class-card p { color: #6c757d; }
-        .join-card { background: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: var(--shadow-light); }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; }
-        .join-btn {
-            width: 100%; background: var(--accent-dark); color: white; border: none; padding: 12px;
-            border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;
-        }
-        .join-btn:hover { background: var(--accent-primary); }
-        .empty-state { text-align: center; color: #6c757d; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - Smart Attendance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="./config.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Background gradient */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8f9fa, #e6f2ef);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating emojis */
+    .emoji {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.15;
+      animation: floatUp 12s linear infinite;
+      z-index: 0;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.2; }
+      80% { opacity: 0.2; }
+      to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Dashboard content */
+    .navbar {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-light);
+      padding: 1rem 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
+    .logout-btn {
+      background: transparent; color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      padding: 0.5rem 1.25rem; border-radius: 50px;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .logout-btn:hover { background: var(--accent-primary); color: white; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; position: relative; z-index: 2; }
+    .header { margin-bottom: 2.5rem; }
+    .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .classes-section h2, .join-section h2 { font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary); }
+
+    #class-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .class-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: var(--shadow-light);
+      border-left: 5px solid var(--accent-primary);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s ease-in-out;
+    }
+    .class-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .class-card h3 { font-size: 1.2rem; color: var(--accent-dark); margin-bottom: 5px; }
+    .class-card p { color: #6c757d; }
+
+    .join-card { background: var(--card-bg); border-radius: 15px; padding: 25px; box-shadow: var(--shadow-light); }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; }
+
+    .join-btn {
+      width: 100%; background: var(--accent-dark); color: white; border: none; padding: 12px;
+      border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s;
+    }
+    .join-btn:hover { background: var(--accent-primary); }
+
+    .empty-state { text-align: center; color: #6c757d; }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand" id="nav-welcome">Student Dashboard</div>
-            <a href="login.html" class="logout-btn">Log Out</a>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="header">
-            <h1>My Classes</h1>
-        </div>
-        <div class="main-grid">
-            <div class="classes-section">
-                <h2>Enrolled Classes</h2>
-                <div id="class-list">
-                    <p class="empty-state">You are not enrolled in any classes yet. Join a class to get started.</p>
-                </div>
-            </div>
-            <div class="join-section">
-                <h2>Join a New Class</h2>
-                <div class="join-card">
-                    <form id="joinClassForm">
-                        <div class="form-group">
-                            <label for="class-code">Enter Class Code</label>
-                            <input type="text" id="class-code" placeholder="6-digit code" maxlength="6" required>
-                        </div>
-                        <button type="submit" class="join-btn">Join</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+  <!-- Floating Emoji Background -->
+  <script>
+    const emojis = ['🎓','📚','💡','🧠','💻','✏️','📖','📘'];
+    for (let i = 0; i < 20; i++) {
+      const e = document.createElement('div');
+      e.className = 'emoji';
+      e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      e.style.left = Math.random() * 100 + 'vw';
+      e.style.animationDuration = 10 + Math.random() * 10 + 's';
+      e.style.fontSize = 1.5 + Math.random() * 1.5 + 'rem';
+      document.body.appendChild(e);
+    }
+  </script>
+
+  <!-- Dashboard UI -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand" id="nav-welcome">Student Dashboard</div>
+      <a href="login.html" class="logout-btn">Log Out</a>
     </div>
+  </nav>
 
-    <script type="module">
-        import { showToast } from './js/toast.js';
-        import { getSupabase } from './js/supabase-init.js';
+  <div class="container">
+    <div class="header">
+      <h1>My Classes</h1>
+    </div>
+    <div class="main-grid">
+      <div class="classes-section">
+        <h2>Enrolled Classes</h2>
+        <div id="class-list">
+          <p class="empty-state">You are not enrolled in any classes yet. Join a class to get started.</p>
+        </div>
+      </div>
+      <div class="join-section">
+        <h2>Join a New Class</h2>
+        <div class="join-card">
+          <form id="joinClassForm">
+            <div class="form-group">
+              <label for="class-code">Enter Class Code</label>
+              <input type="text" id="class-code" placeholder="6-digit code" maxlength="6" required>
+            </div>
+            <button type="submit" class="join-btn">Join</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        const studentId = localStorage.getItem('studentId');
-        const studentName = localStorage.getItem('studentName');
-        const classListEl = document.getElementById('class-list');
-        const joinForm = document.getElementById('joinClassForm');
+  <script type="module">
+    import { showToast } from './js/toast.js';
+    import { getSupabase } from './js/supabase-init.js';
 
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!studentId) {
-                window.location.href = 'login.html';
-                return;
-            }
-            document.getElementById('nav-welcome').textContent = `Welcome, ${studentName}!`;
-            fetchEnrolledClasses();
+    const studentId = localStorage.getItem('studentId');
+    const studentName = localStorage.getItem('studentName');
+    const classListEl = document.getElementById('class-list');
+    const joinForm = document.getElementById('joinClassForm');
 
-            joinForm.addEventListener('submit', handleJoinClass);
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!studentId) {
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('nav-welcome').textContent = `Welcome, ${studentName}!`;
+      fetchEnrolledClasses();
+      joinForm.addEventListener('submit', handleJoinClass);
+    });
+
+    async function fetchEnrolledClasses() {
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase
+          .from('enrollments')
+          .select('classes(*)')
+          .eq('student_id', studentId);
+        if (error) throw error;
+
+        classListEl.innerHTML = '';
+        if (data.length === 0) {
+          classListEl.innerHTML = `<p class="empty-state">You are not enrolled in any classes yet.</p>`;
+          return;
+        }
+
+        data.forEach(enrollment => {
+          const cls = enrollment.classes;
+          if (!cls) return;
+          const card = document.createElement('a');
+          card.href = `class-view.html?classId=${cls.id}&classCode=${cls.class_code}`;
+          card.className = 'class-card';
+          card.innerHTML = `
+            <h3>${cls.subject}</h3>
+            <p>${cls.department} - Sem ${cls.semester}</p>
+          `;
+          classListEl.appendChild(card);
         });
 
-        // --- Data Fetching & Rendering ---
-        async function fetchEnrolledClasses() {
-            try {
-                const supabase = await getSupabase();
-                // This query fetches the enrollments and, for each one, fetches the related class details.
-                const { data, error } = await supabase
-                    .from('enrollments')
-                    .select('classes(*)')
-                    .eq('student_id', studentId);
-                
-                if (error) throw error;
-                
-                classListEl.innerHTML = '';
-                if (data.length === 0) {
-                    classListEl.innerHTML = `<p class="empty-state">You are not enrolled in any classes yet.</p>`;
-                    return;
-                }
+      } catch (err) {
+        showToast(`Error loading classes: ${err.message}`, 'error');
+      }
+    }
 
-                data.forEach(enrollment => {
-                    const cls = enrollment.classes;
-                    if (!cls) return; // Skip if class data is missing
-                    const card = document.createElement('a');
-                    card.href = `class-view.html?classId=${cls.id}&classCode=${cls.class_code}`;
-                    card.className = 'class-card';
-                    card.innerHTML = `
-                        <h3>${cls.subject}</h3>
-                        <p>${cls.department} - Sem ${cls.semester}</p>
-                    `;
-                    classListEl.appendChild(card);
-                });
+    async function handleJoinClass(e) {
+      e.preventDefault();
+      const classCode = document.getElementById('class-code').value.trim().toUpperCase();
+      if (classCode.length !== 6) return showToast('Class code must be 6 characters.', 'error');
 
-            } catch (err) {
-                showToast(`Error loading classes: ${err.message}`, 'error');
-            }
+      try {
+        const supabase = await getSupabase();
+        const { data: classData, error: classError } = await supabase
+          .from('classes')
+          .select('id')
+          .eq('class_code', classCode)
+          .single();
+        if (classError || !classData) throw new Error('Invalid class code.');
+
+        const { error: enrollError } = await supabase
+          .from('enrollments')
+          .insert({ student_id: studentId, class_id: classData.id });
+        if (enrollError) {
+          if (enrollError.code === '23505') throw new Error('You are already enrolled in this class.');
+          throw enrollError;
         }
 
-        // --- Event Handling ---
-        async function handleJoinClass(e) {
-            e.preventDefault();
-            const classCode = document.getElementById('class-code').value.trim().toUpperCase();
-            if (classCode.length !== 6) {
-                return showToast('Class code must be 6 characters.', 'error');
-            }
+        showToast('Successfully joined class!', 'success');
+        joinForm.reset();
+        fetchEnrolledClasses();
 
-            try {
-                const supabase = await getSupabase();
-                // 1. Find the class ID from the code
-                const { data: classData, error: classError } = await supabase
-                    .from('classes')
-                    .select('id')
-                    .eq('class_code', classCode)
-                    .single();
-                if (classError || !classData) throw new Error('Invalid class code.');
-
-                // 2. Insert into enrollments table
-                const { error: enrollError } = await supabase
-                    .from('enrollments')
-                    .insert({ student_id: studentId, class_id: classData.id });
-                
-                if (enrollError) {
-                    if (enrollError.code === '23505') throw new Error('You are already enrolled in this class.');
-                    throw enrollError;
-                }
-                
-                showToast('Successfully joined class!', 'success');
-                joinForm.reset();
-                fetchEnrolledClasses(); // Refresh the list
-
-            } catch (err) {
-                showToast(err.message, 'error');
-            }
-        }
-    </script>
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    }
+  </script>
 </body>
 </html>

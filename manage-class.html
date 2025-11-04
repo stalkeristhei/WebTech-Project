@@ -16,7 +16,48 @@
             --error: #e63946;
             --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+
+        /* Floating emoji background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .emoji-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            background: linear-gradient(135deg, #f9fcfb, #f1f9f8);
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: floatEmoji 25s linear infinite;
+        }
+
+        @keyframes floatEmoji {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Core UI */
         .navbar {
             background: var(--card-bg);
             box-shadow: var(--shadow-light);
@@ -47,6 +88,42 @@
         }
         .logout-btn:hover { background: var(--accent-primary); color: white; }
         .container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+        /* Back button */
+        .back-btn {
+            display: inline-block;
+            background: var(--accent-dark);
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            margin: 1.5rem 2rem;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { background: var(--accent-primary); }
+
+        /* Search bar */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        #search-bar {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--accent-primary);
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #search-bar:focus {
+            border-color: var(--accent-dark);
+            box-shadow: 0 0 5px rgba(42,157,143,0.5);
+        }
+
         #class-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -90,7 +167,7 @@
             border: none; transition: all 0.3s ease; text-decoration: none; display: block;
         }
         .btn-manage {
-            grid-column: 1 / -1; /* Make this button span both columns */
+            grid-column: 1 / -1;
             background-color: var(--accent-primary);
             color: white;
         }
@@ -103,6 +180,9 @@
     </style>
 </head>
 <body>
+    <!-- Floating Emoji Background -->
+    <div class="emoji-bg" id="emoji-bg"></div>
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">📚 My Classes</div>
@@ -112,7 +192,13 @@
             </div>
         </div>
     </nav>
+
+    <a href="teacher-dashboard.html" class="back-btn">⬅ Back to Dashboard</a>
+
     <div class="container">
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="🔍 Search class by name...">
+        </div>
         <div id="class-list">
             <p>Loading classes...</p>
         </div>
@@ -122,11 +208,28 @@
         import { showToast } from './js/toast.js';
         import { getSupabase } from './js/supabase-init.js';
 
+        // Background emoji generator
+        const emojiSet = ['📚','🧑‍🏫','🏫','🗂️','🧾','🧮'];
+        const emojiContainer = document.getElementById('emoji-bg');
+
+        for (let i = 0; i < 25; i++) {
+            const emoji = document.createElement('div');
+            emoji.classList.add('emoji');
+            emoji.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.fontSize = `${1 + Math.random() * 2.5}rem`;
+            emoji.style.animationDuration = `${20 + Math.random() * 15}s`;
+            emoji.style.animationDelay = `${Math.random() * 10}s`;
+            emojiContainer.appendChild(emoji);
+        }
+
         const teacherId = localStorage.getItem('teacherId');
         if (!teacherId) {
             showToast('You must be logged in.', 'error');
             setTimeout(() => window.location.href = 'login.html', 1500);
         }
+
+        let allClasses = [];
 
         async function fetchClasses() {
             const classListElement = document.getElementById('class-list');
@@ -139,39 +242,54 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-
-                if (classes.length === 0) {
-                    classListElement.innerHTML = `<div class="empty-state"><h3>No classes found.</h3><p>Click 'Create New Class' to get started.</p></div>`;
-                    return;
-                }
-
-                classListElement.innerHTML = '';
-                classes.forEach(cls => {
-                    const classItem = document.createElement('div');
-                    classItem.className = 'class-item';
-                    classItem.innerHTML = `
-                        <div>
-                            <div class="class-title">${cls.subject}</div>
-                            <div class="class-subtitle">${cls.department} - Semester ${cls.semester}</div>
-                            <div class="class-detail"><span>Class Code:</span> <span class="class-code">${cls.class_code}</span></div>
-                            <div class="class-detail"><span>Academic Year:</span> <strong>${cls.academic_year}</strong></div>
-                        </div>
-                        <div>
-                            <a href="tindex.html?classCode=${cls.class_code}" class="btn-action btn-manage">Manage Attendance</a>
-                            <div class="actions">
-                                <button class="btn-action btn-copy" onclick="copyCode('${cls.class_code}')">📋 Copy Code</button>
-                                <button class="btn-action btn-delete" onclick="deleteClass('${cls.id}')">🗑️ Delete</button>
-                            </div>
-                        </div>
-                    `;
-                    classListElement.appendChild(classItem);
-                });
+                allClasses = classes;
+                renderClasses(classes);
 
             } catch (error) {
                 classListElement.innerHTML = `<p class="error-message">Error loading classes: ${error.message}</p>`;
             }
         }
 
+        function renderClasses(classes) {
+            const classListElement = document.getElementById('class-list');
+            if (classes.length === 0) {
+                classListElement.innerHTML = `<div class="empty-state"><h3>No classes found.</h3><p>Try adjusting your search or create a new class.</p></div>`;
+                return;
+            }
+
+            classListElement.innerHTML = '';
+            classes.forEach(cls => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.innerHTML = `
+                    <div>
+                        <div class="class-title">${cls.subject}</div>
+                        <div class="class-subtitle">${cls.department} - Semester ${cls.semester}</div>
+                        <div class="class-detail"><span>Class Code:</span> <span class="class-code">${cls.class_code}</span></div>
+                        <div class="class-detail"><span>Academic Year:</span> <strong>${cls.academic_year}</strong></div>
+                    </div>
+                    <div>
+                        <a href="tindex.html?classCode=${cls.class_code}" class="btn-action btn-manage">Manage Attendance</a>
+                        <div class="actions">
+                            <button class="btn-action btn-copy" onclick="copyCode('${cls.class_code}')">📋 Copy Code</button>
+                            <button class="btn-action btn-delete" onclick="deleteClass('${cls.id}')">🗑️ Delete</button>
+                        </div>
+                    </div>
+                `;
+                classListElement.appendChild(classItem);
+            });
+        }
+
+        // Search
+        document.getElementById('search-bar').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filtered = allClasses.filter(cls =>
+                cls.subject.toLowerCase().includes(query)
+            );
+            renderClasses(filtered);
+        });
+
+        // Actions
         window.copyCode = function(code) {
             navigator.clipboard.writeText(code).then(() => {
                 showToast('Class code copied!', 'success');
@@ -185,14 +303,13 @@
                     const { error } = await supabase.from('classes').delete().eq('id', classId);
                     if (error) throw error;
                     showToast('Class deleted successfully.', 'success');
-                    fetchClasses(); // Refresh the list
+                    fetchClasses();
                 } catch (error) {
                     showToast(`Error: ${error.message}`, 'error');
                 }
             }
         }
 
-        // Add event listener for logout
         document.querySelector('.logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.clear();

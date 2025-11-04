@@ -1,177 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Class - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-            --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-        .navbar {
-            background: var(--card-bg);
-            box-shadow: var(--shadow-light);
-            padding: 1rem 2rem;
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
-        .logout-btn {
-            background: transparent; color: var(--accent-primary);
-            border: 1px solid var(--accent-primary);
-            padding: 0.5rem 1.25rem; border-radius: 50px;
-            font-weight: 600; cursor: pointer; text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .logout-btn:hover { background: var(--accent-primary); color: white; }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--accent-dark);
-            margin-bottom: 10px;
-        }
-        .header h1 span {
-            background-color: #e9ecef;
-            color: var(--accent-dark);
-            padding: 0.25rem 0.75rem;
-            border-radius: 8px;
-            font-size: 2rem;
-            display: inline-block;
-        }
-        .header p { font-size: 1.2rem; color: #6c757d; margin-bottom: 3rem; }
-        .option-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
-        }
-        .option-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            border-top: 4px solid var(--accent-primary);
-        }
-        .option-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-medium);
-        }
-        .option-card .icon {
-            font-size: 3.5rem;
-            display: block;
-            margin-bottom: 1.5rem;
-            color: var(--accent-primary);
-        }
-        .option-card h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .option-card p {
-            font-size: 1rem;
-            color: #6c757d;
-            line-height: 1.6;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 3rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Class - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+      --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
+    }
+
+    /* 🌟 Floating Emoji Background */
+    .floating-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0f7fa 100%);
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.25;
+      animation: float 15s infinite linear;
+      user-select: none;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 0.35;
+      }
+      90% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-light);
+      padding: 1rem 2rem;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+    .logout-btn {
+      background: transparent;
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .logout-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+    }
+    .header h1 span {
+      background-color: #e9ecef;
+      color: var(--accent-dark);
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      font-size: 2rem;
+      display: inline-block;
+    }
+    .header p {
+      font-size: 1.2rem;
+      color: #6c757d;
+      margin-bottom: 3rem;
+    }
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+    .option-card {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--accent-primary);
+    }
+    .option-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-medium);
+    }
+    .option-card .icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1.5rem;
+      color: var(--accent-primary);
+    }
+    .option-card h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .option-card p {
+      font-size: 1rem;
+      color: #6c757d;
+      line-height: 1.6;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 3rem;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">📊 Attendance Hub</div>
-            <a href="login.html" class="logout-btn">Log Out</a>
-        </div>
-    </nav>
+  <!-- 🌈 Floating Emoji Background Layer -->
+  <div class="floating-bg" id="emoji-container"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Managing Class: <span id="class-code-display">...</span></h1>
-            <p>Select an action for this class.</p>
-        </div>
-        <div class="option-grid">
-            <a id="mark-attendance-link" href="#" class="option-card">
-                <span class="icon">📝</span>
-                <h2>Mark Attendance</h2>
-                <p>Take today's roll call and mark students present.</p>
-            </a>
-            <a id="present-report-link" href="#" class="option-card">
-                <span class="icon">✅</span>
-                <h2>Present Report</h2>
-                <p>View a list of all students marked as present.</p>
-            </a>
-            <a id="absent-report-link" href="#" class="option-card">
-                <span class="icon">❌</span>
-                <h2>Absent Report</h2>
-                <p>See which students are absent and need follow-up.</p>
-            </a>
-        </div>
-        <a href="manage-class.html" class="back-link">← Back to My Classes</a>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">📊 Attendance Hub</div>
+      <a href="login.html" class="logout-btn">Log Out</a>
     </div>
+  </nav>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Get the class code from the URL parameter
-            const params = new URLSearchParams(window.location.search);
-            const classCode = params.get('classCode');
+  <div class="container">
+    <div class="header">
+      <h1>Managing Class: <span id="class-code-display">...</span></h1>
+      <p>Select an action for this class.</p>
+    </div>
+    <div class="option-grid">
+      <a id="mark-attendance-link" href="#" class="option-card">
+        <span class="icon">📝</span>
+        <h2>Mark Attendance</h2>
+        <p>Take today's roll call and mark students present.</p>
+      </a>
+      <a id="present-report-link" href="#" class="option-card">
+        <span class="icon">✅</span>
+        <h2>Present Report</h2>
+        <p>View a list of all students marked as present.</p>
+      </a>
+      <a id="absent-report-link" href="#" class="option-card">
+        <span class="icon">❌</span>
+        <h2>Absent Report</h2>
+        <p>See which students are absent and need follow-up.</p>
+      </a>
+    </div>
+    <a href="manage-class.html" class="back-link">← Back to My Classes</a>
+  </div>
 
-            if (!classCode) {
-                alert('No class selected. Redirecting to your class list.');
-                window.location.href = 'manage-class.html';
-                return;
-            }
+  <script>
+    // Floating Emoji Background
+    const emojiSet = ["📚", "🏫", "🧑‍🏫", "🗂️", "🧮", "📝"];
+    const container = document.getElementById("emoji-container");
 
-            // Store the classCode in localStorage so other pages can use it
-            localStorage.setItem('activeClassCode', classCode);
+    for (let i = 0; i < 25; i++) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = emojiSet[Math.floor(Math.random() * emojiSet.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = 10 + Math.random() * 10 + "s";
+      emoji.style.fontSize = 1.5 + Math.random() * 1.5 + "rem";
+      emoji.style.animationDelay = Math.random() * 10 + "s";
+      container.appendChild(emoji);
+    }
 
-            // Update the UI
-            document.getElementById('class-code-display').textContent = classCode;
+    // Main Page Logic
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const classCode = params.get("classCode");
 
-            // Dynamically set the links for the action cards
-            document.getElementById('mark-attendance-link').href = `tattendance.html`;
-            document.getElementById('present-report-link').href = `compresent.html`;
-            document.getElementById('absent-report-link').href = `comabsent.html`;
+      if (!classCode) {
+        alert("No class selected. Redirecting to your class list.");
+        window.location.href = "manage-class.html";
+        return;
+      }
 
-            // Logout functionality
-            document.querySelector('.logout-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.clear();
-                alert('You have been logged out.');
-                window.location.href = 'login.html';
-            });
-        });
-    </script>
+      localStorage.setItem("activeClassCode", classCode);
+      document.getElementById("class-code-display").textContent = classCode;
+
+      document.getElementById("mark-attendance-link").href = `tattendance.html`;
+      document.getElementById("present-report-link").href = `compresent.html`;
+      document.getElementById("absent-report-link").href = `comabsent.html`;
+
+      document.querySelector(".logout-btn").addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        alert("You have been logged out.");
+        window.location.href = "login.html";
+      });
+    });
+  </script>
 </body>
 </html>

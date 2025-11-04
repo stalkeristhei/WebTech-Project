@@ -1,146 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Summary - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="./config.js"></script>
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        .header { text-align: center; margin-bottom: 2rem; }
-        .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .summary-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: var(--shadow-light);
-        }
-        .summary-number { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
-        .summary-label { font-size: 1rem; color: #6c757d; }
-        .table-container { background: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow-light); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
-        th { background-color: #f8f9fa; font-weight: 600; }
-        .nav-btn {
-            display: inline-block; margin-top: 2rem; background: var(--accent-primary); color: white;
-            padding: 0.75rem 1.5rem; border-radius: 50px; text-decoration: none;
-            font-weight: 600; transition: background-color 0.2s;
-        }
-        .nav-btn:hover{ background-color: var(--accent-dark); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Summary - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="./config.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating emoji background */
+    .emoji-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.15;
+      animation: floatUp 10s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.25; }
+      90% { opacity: 0.25; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: var(--shadow-light);
+    }
+
+    .summary-number { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+    .summary-label { font-size: 1rem; color: #6c757d; }
+
+    .table-container {
+      background: var(--card-bg);
+      border-radius: 15px;
+      box-shadow: var(--shadow-light);
+      overflow: hidden;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
+    th { background-color: #f8f9fa; font-weight: 600; }
+
+    .nav-btn {
+      display: inline-block;
+      margin-top: 2rem;
+      background: var(--accent-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .nav-btn:hover { background-color: var(--accent-dark); }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>My Attendance Summary</h1>
-        </div>
-        <div class="summary-grid">
-            <div class="summary-card">
-                <div id="days-present" class="summary-number">0</div>
-                <div class="summary-label">Days Present</div>
-            </div>
-            <div class="summary-card">
-                <div id="days-absent" class="summary-number">0</div>
-                <div class="summary-label">Days Absent</div>
-            </div>
-            <div class="summary-card">
-                <div id="attendance-rate" class="summary-number">0%</div>
-                <div class="summary-label">Attendance Rate</div>
-            </div>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="log-body"></tbody>
-            </table>
-        </div>
-        <div style="text-align: center;">
-             <a id="back-link" href="#" class="nav-btn">← Back to Class Dashboard</a>
-        </div>
+  <!-- Floating Emoji Background -->
+  <div class="emoji-bg" id="emojiBg"></div>
+
+  <div class="container">
+    <div class="header">
+      <h1>My Attendance Summary</h1>
     </div>
-    <script type="module">
-        import { getSupabase } from './js/supabase-init.js';
-        const supabase = await getSupabase();
 
-        const studentId = localStorage.getItem('studentId');
-        // ** THE FIX IS HERE: Use 'activeClassId' and 'activeClassCode' **
-        const activeClassId = localStorage.getItem('activeClassId');
-        const activeClassCode = localStorage.getItem('activeClassCode');
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div id="days-present" class="summary-number">0</div>
+        <div class="summary-label">Days Present</div>
+      </div>
+      <div class="summary-card">
+        <div id="days-absent" class="summary-number">0</div>
+        <div class="summary-label">Days Absent</div>
+      </div>
+      <div class="summary-card">
+        <div id="attendance-rate" class="summary-number">0%</div>
+        <div class="summary-label">Attendance Rate</div>
+      </div>
+    </div>
 
-        // Set the back link dynamically
-        document.getElementById('back-link').href = `class-view.html?classId=${activeClassId}&classCode=${activeClassCode}`;
-        
-        async function loadAttendanceSummary() {
-            if (!studentId) {
-                alert("Could not find your Student ID. Please log in again.");
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Note: This logic shows the student's *overall* summary across all classes.
-            // A more advanced version would filter by classId.
-            const { data, error } = await supabase
-                .from('student_log')
-                .select('Date, Status')
-                .eq('"Roll Number"', studentId)
-                .order('Date', { ascending: false });
-            
-            if (error) {
-                console.error(error);
-                return;
-            }
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="log-body"></tbody>
+      </table>
+    </div>
 
-            const presentCount = data.filter(d => d.Status === 'Present').length;
-            // A more accurate "absent" count would require knowing total lecture days.
-            // For now, we assume non-present days in the log are absent.
-            const totalLoggedDays = data.length;
-            const absentCount = totalLoggedDays - presentCount; 
-            const percentage = totalLoggedDays > 0 ? ((presentCount / totalLoggedDays) * 100).toFixed(1) : 0;
+    <div style="text-align: center;">
+      <a id="back-link" href="#" class="nav-btn">← Back to Class Dashboard</a>
+    </div>
+  </div>
 
-            document.getElementById('days-present').textContent = presentCount;
-            document.getElementById('days-absent').textContent = absentCount;
-            document.getElementById('attendance-rate').textContent = `${percentage}%`;
+  <script type="module">
+    import { getSupabase } from './js/supabase-init.js';
+    const supabase = await getSupabase();
 
-            const logBody = document.getElementById('log-body');
-            logBody.innerHTML = '';
-            if (data.length === 0) {
-                 logBody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding: 2rem;">No attendance records found yet.</td></tr>`;
-            } else {
-                data.forEach(log => {
-                    const row = document.createElement('tr');
-                    // Ensure date is valid before formatting
-                    const dateStr = log.Date ? new Date(log.Date).toLocaleDateString() : 'Invalid Date';
-                    row.innerHTML = `
-                        <td>${dateStr}</td>
-                        <td>${log.Status}</td>
-                    `;
-                    logBody.appendChild(row);
-                });
-            }
-        }
-        loadAttendanceSummary();
-    </script>
+    const studentId = localStorage.getItem('studentId');
+    const activeClassId = localStorage.getItem('activeClassId');
+    const activeClassCode = localStorage.getItem('activeClassCode');
+
+    document.getElementById('back-link').href = `class-view.html?classId=${activeClassId}&classCode=${activeClassCode}`;
+
+    async function loadAttendanceSummary() {
+      if (!studentId) {
+        alert("Could not find your Student ID. Please log in again.");
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('student_log')
+        .select('Date, Status')
+        .eq('"Roll Number"', studentId)
+        .order('Date', { ascending: false });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      const presentCount = data.filter(d => d.Status === 'Present').length;
+      const totalLoggedDays = data.length;
+      const absentCount = totalLoggedDays - presentCount;
+      const percentage = totalLoggedDays > 0 ? ((presentCount / totalLoggedDays) * 100).toFixed(1) : 0;
+
+      document.getElementById('days-present').textContent = presentCount;
+      document.getElementById('days-absent').textContent = absentCount;
+      document.getElementById('attendance-rate').textContent = `${percentage}%`;
+
+      const logBody = document.getElementById('log-body');
+      logBody.innerHTML = '';
+      if (data.length === 0) {
+        logBody.innerHTML = `<tr><td colspan="2" style="text-align:center; padding: 2rem;">No attendance records found yet.</td></tr>`;
+      } else {
+        data.forEach(log => {
+          const row = document.createElement('tr');
+          const dateStr = log.Date ? new Date(log.Date).toLocaleDateString() : 'Invalid Date';
+          row.innerHTML = `<td>${dateStr}</td><td>${log.Status}</td>`;
+          logBody.appendChild(row);
+        });
+      }
+    }
+
+    loadAttendanceSummary();
+
+    // Emoji background generator
+    const emojis = ['🎓','🧮','🗓️','📊','✏️','🧠'];
+    const emojiBg = document.getElementById('emojiBg');
+
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.animationDuration = 8 + Math.random() * 5 + 's';
+      emoji.style.fontSize = 1.5 + Math.random() * 1.5 + 'rem';
+      emojiBg.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 13000);
+    }
+
+    setInterval(createEmoji, 800);
+  </script>
 </body>
 </html>

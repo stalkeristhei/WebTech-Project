@@ -1,145 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration - Smart Attendance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="./config.js"></script>
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --error: #e63946;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .register-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            width: 100%;
-            max-width: 420px;
-            padding: 50px 40px;
-            text-align: center;
-        }
-        .header h1 { font-size: 2rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 10px; }
-        .header p { font-size: 1rem; color: #6c757d; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ced4da;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
-        }
-        .register-btn {
-            width: 100%;
-            background: var(--accent-dark);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 5px;
-        }
-        .register-btn:hover { background: var(--accent-primary); transform: translateY(-2px); }
-        .back-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .error-message { color: var(--error); font-size: 0.9rem; margin-top: 8px; display: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration - Smart Attendance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="./config.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --error: #e63946;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8f9fa, #e6f2ef);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating emojis */
+    .emoji {
+      position: fixed;
+      font-size: 2rem;
+      opacity: 0.15;
+      animation: floatUp 12s linear infinite;
+      z-index: 0;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.2; }
+      80% { opacity: 0.2; }
+      to { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .register-container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      width: 100%;
+      max-width: 420px;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1rem;
+      color: #6c757d;
+      margin-bottom: 30px;
+    }
+
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ced4da;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+    }
+
+    .register-btn {
+      width: 100%;
+      background: var(--accent-dark);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 5px;
+    }
+
+    .register-btn:hover {
+      background: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.9rem;
+      margin-top: 8px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="register-container">
-        <div class="header">
-            <h1>Create Your Student Profile</h1>
-            <p>This is a one-time setup. You will use your Student ID to log in.</p>
-        </div>
-        <form id="studentRegisterForm">
-            <div class="form-group">
-                <label for="student-name">Full Name</label>
-                <input type="text" id="student-name" placeholder="As it appears on the roster" required>
-            </div>
-            <div class="form-group">
-                <label for="student-id">Student ID / Roll Number</label>
-                <input type="text" id="student-id" placeholder="Your permanent, unique student ID" required>
-                <div class="error-message" id="form-error"></div>
-            </div>
-            <button type="submit" class="register-btn">Create Profile</button>
-        </form>
-        <a href="login.html" class="back-btn">Already have a profile? Log in</a>
+
+  <!-- Floating emoji background -->
+  <script>
+    const emojis = ['🎓','📚','💡','🧠','💻','✏️','📖','📘'];
+    for (let i = 0; i < 20; i++) {
+      const e = document.createElement('div');
+      e.className = 'emoji';
+      e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      e.style.left = Math.random() * 100 + 'vw';
+      e.style.animationDuration = 10 + Math.random() * 10 + 's';
+      e.style.fontSize = 1.5 + Math.random() * 1.5 + 'rem';
+      document.body.appendChild(e);
+    }
+  </script>
+
+  <div class="register-container">
+    <div class="header">
+      <h1>Create Your Student Profile</h1>
+      <p>This is a one-time setup. You will use your Student ID to log in.</p>
     </div>
+    <form id="studentRegisterForm">
+      <div class="form-group">
+        <label for="student-name">Full Name</label>
+        <input type="text" id="student-name" placeholder="As it appears on the roster" required>
+      </div>
+      <div class="form-group">
+        <label for="student-id">Student ID / Roll Number</label>
+        <input type="text" id="student-id" placeholder="Your permanent, unique student ID" required>
+        <div class="error-message" id="form-error"></div>
+      </div>
+      <button type="submit" class="register-btn">Create Profile</button>
+    </form>
+    <a href="login.html" class="back-btn">Already have a profile? Log in</a>
+  </div>
 
-    <script type="module">
-        import { showToast } from './js/toast.js';
-        import { getSupabase } from './js/supabase-init.js';
+  <script type="module">
+    import { showToast } from './js/toast.js';
+    import { getSupabase } from './js/supabase-init.js';
 
-        document.getElementById('studentRegisterForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const name = document.getElementById('student-name').value.trim();
-            const studentId = document.getElementById('student-id').value.trim();
-            const errorDiv = document.getElementById('form-error');
-            errorDiv.style.display = 'none';
+    document.getElementById('studentRegisterForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('student-name').value.trim();
+      const studentId = document.getElementById('student-id').value.trim();
+      const errorDiv = document.getElementById('form-error');
+      errorDiv.style.display = 'none';
 
-            if (!name || !studentId) {
-                return showToast('All fields are required.', 'error');
-            }
+      if (!name || !studentId) {
+        return showToast('All fields are required.', 'error');
+      }
 
-            const registerBtn = event.target.querySelector('.register-btn');
-            registerBtn.textContent = 'Creating...';
-            registerBtn.disabled = true;
+      const registerBtn = event.target.querySelector('.register-btn');
+      registerBtn.textContent = 'Creating...';
+      registerBtn.disabled = true;
 
-            try {
-                const supabase = await getSupabase();
-                const { error } = await supabase
-                    .from('students')
-                    .insert({ roll_number: studentId, full_name: name });
-                
-                if (error) {
-                    if (error.code === '23505') { // Unique violation
-                        throw new Error(`Student ID "${studentId}" already exists. Please log in.`);
-                    }
-                    throw error;
-                }
+      try {
+        const supabase = await getSupabase();
+        const { error } = await supabase
+          .from('students')
+          .insert({ roll_number: studentId, full_name: name });
 
-                showToast('Profile created! You can now log in.', 'success');
-                setTimeout(() => window.location.href = 'login.html', 1500);
+        if (error) {
+          if (error.code === '23505') {
+            throw new Error(`Student ID "${studentId}" already exists. Please log in.`);
+          }
+          throw error;
+        }
 
-            } catch (err) {
-                errorDiv.textContent = err.message;
-                errorDiv.style.display = 'block';
-            }
+        showToast('Profile created! You can now log in.', 'success');
+        setTimeout(() => window.location.href = 'login.html', 1500);
 
-            registerBtn.textContent = 'Create Profile';
-            registerBtn.disabled = false;
-        });
-    </script>
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
+      }
+
+      registerBtn.textContent = 'Create Profile';
+      registerBtn.disabled = false;
+    });
+  </script>
 </body>
 </html>

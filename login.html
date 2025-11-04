@@ -1,207 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="./config.js"></script>
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --error: #e63946;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .login-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            width: 100%;
-            max-width: 420px;
-            padding: 50px 40px;
-            text-align: center;
-        }
-        .header h1 { font-size: 2rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 10px; }
-        .header p { font-size: 1rem; color: #6c757d; margin-bottom: 30px; }
-        .role-selector {
-            display: flex;
-            background: #e9ecef;
-            border-radius: 50px;
-            margin-bottom: 30px;
-            padding: 5px;
-        }
-        .role-btn {
-            flex: 1; background: none; border: none; padding: 12px 15px; font-size: 0.95rem; font-weight: 600;
-            cursor: pointer; transition: all 0.3s ease; color: #6c757d; border-radius: 50px;
-        }
-        .role-btn.active {
-            background: var(--accent-primary); color: white; box-shadow: 0 2px 10px rgba(42, 157, 143, 0.3);
-        }
-        .form-container { display: none; }
-        .form-container.active { display: block; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
-        .form-group input {
-            width: 100%; padding: 12px 15px; border: 1px solid #ced4da;
-            border-radius: 10px; font-size: 1rem; transition: all 0.3s ease;
-        }
-        .form-group input:focus {
-            outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
-        }
-        .login-btn {
-            width: 100%; background: var(--accent-dark); color: white; border: none; padding: 15px;
-            border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;
-        }
-        .login-btn:hover { background: var(--accent-primary); transform: translateY(-2px); }
-        .secondary-btn {
-            width: 100%; background: transparent; color: var(--accent-primary); border: 1px solid var(--accent-primary);
-            padding: 12px; border-radius: 10px; font-size: 0.95rem; font-weight: 600;
-            cursor: pointer; transition: all 0.3s ease; margin-top: 10px; text-decoration: none; display: block;
-        }
-        .secondary-btn:hover { background: var(--accent-primary); color: white; }
-        .error-message { color: var(--error); font-size: 0.9rem; margin-top: 8px; display: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="./config.js"></script>
+  <style>
+    :root {
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --error: #e63946;
+      --shadow-light: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #fdfaf6, #f5efe9, #fffdf9);
+      background-size: 200% 200%;
+      animation: bgShift 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgShift {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    /* Floating emoji animation */
+    .emoji {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.3;
+      animation: float 10s linear infinite;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0.2; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0.4; }
+    }
+
+    .login-container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      width: 100%;
+      max-width: 420px;
+      padding: 50px 40px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h1 { font-size: 2rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 10px; }
+    .header p { font-size: 1rem; color: #6c757d; margin-bottom: 30px; }
+
+    .role-selector {
+      display: flex;
+      background: #e9ecef;
+      border-radius: 50px;
+      margin-bottom: 30px;
+      padding: 5px;
+    }
+
+    .role-btn {
+      flex: 1; background: none; border: none; padding: 12px 15px;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      color: #6c757d; border-radius: 50px;
+    }
+
+    .role-btn.active {
+      background: var(--accent-primary); color: white;
+      box-shadow: 0 2px 10px rgba(42, 157, 143, 0.3);
+    }
+
+    .form-container { display: none; }
+    .form-container.active { display: block; }
+
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+
+    .form-group input {
+      width: 100%; padding: 12px 15px; border: 1px solid #ced4da;
+      border-radius: 10px; font-size: 1rem; transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none; border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+    }
+
+    .login-btn {
+      width: 100%; background: var(--accent-dark); color: white; border: none;
+      padding: 15px; border-radius: 10px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease; margin-top: 15px;
+    }
+
+    .login-btn:hover { background: var(--accent-primary); transform: translateY(-2px); }
+
+    .secondary-btn {
+      width: 100%; background: transparent; color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      padding: 12px; border-radius: 10px; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      margin-top: 10px; text-decoration: none; display: block;
+    }
+
+    .secondary-btn:hover { background: var(--accent-primary); color: white; }
+    .error-message { color: var(--error); font-size: 0.9rem; margin-top: 8px; display: none; }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="header">
-            <h1>Welcome Back!</h1>
-            <p>Please select your role to continue.</p>
-        </div>
-        <div class="role-selector">
-            <button class="role-btn active" data-role="teacher">👨‍🏫 Teacher</button>
-            <button class="role-btn" data-role="student">👨‍🎓 Student</button>
-        </div>
+  <!-- Floating emojis -->
+  <div class="emoji" style="left:15%; animation-delay:0s;">🎓</div>
+  <div class="emoji" style="left:50%; animation-delay:3s;">💻</div>
+  <div class="emoji" style="left:80%; animation-delay:5s;">🧑‍🏫</div>
 
-        <div class="form-container active" id="teacher-form">
-            <form id="teacherLoginForm">
-                <div class="form-group">
-                    <label for="teacher-email">Email Address</label>
-                    <input type="email" id="teacher-email" placeholder="e.g., teacher@school.edu" required>
-                </div>
-                <div class="form-group">
-                    <label for="teacher-password">Password</label>
-                    <input type="password" id="teacher-password" placeholder="Enter your password" required>
-                    <div class="error-message" id="teacher-error"></div>
-                </div>
-                <button type="submit" class="login-btn">Login as Teacher</button>
-                <a href="teacher-register.html" class="secondary-btn">Create a Teacher Account</a>
-            </form>
-        </div>
-
-        <div class="form-container" id="student-form">
-            <form id="studentLoginForm">
-                <div class="form-group">
-                    <label for="student-id">Student ID / Roll Number</label>
-                    <input type="text" id="student-id" placeholder="Your unique student ID" required>
-                    <div class="error-message" id="student-error"></div>
-                </div>
-                <button type="submit" class="login-btn">Login as Student</button>
-                <a href="student-register.html" class="secondary-btn">New Student? Create Profile</a>
-            </form>
-        </div>
+  <div class="login-container">
+    <div class="header">
+      <h1>Welcome Back!</h1>
+      <p>Please select your role to continue.</p>
     </div>
 
-    <script type="module">
-        import { showToast } from './js/toast.js';
-        import { getSupabase } from './js/supabase-init.js';
+    <div class="role-selector">
+      <button class="role-btn active" data-role="teacher">👨‍🏫 Teacher</button>
+      <button class="role-btn" data-role="student">👨‍🎓 Student</button>
+    </div>
 
-        localStorage.clear();
+    <div class="form-container active" id="teacher-form">
+      <form id="teacherLoginForm">
+        <div class="form-group">
+          <label for="teacher-email">Email Address</label>
+          <input type="email" id="teacher-email" placeholder="e.g., teacher@school.edu" required>
+        </div>
+        <div class="form-group">
+          <label for="teacher-password">Password</label>
+          <input type="password" id="teacher-password" placeholder="Enter your password" required>
+          <div class="error-message" id="teacher-error"></div>
+        </div>
+        <button type="submit" class="login-btn">Login as Teacher</button>
+        <a href="teacher-register.html" class="secondary-btn">Create a Teacher Account</a>
+      </form>
+    </div>
 
-        function switchRole(role) {
-            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`.role-btn[data-role='${role}']`).classList.add('active');
-            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
-            document.getElementById(role + '-form').classList.add('active');
+    <div class="form-container" id="student-form">
+      <form id="studentLoginForm">
+        <div class="form-group">
+          <label for="student-id">Student ID / Roll Number</label>
+          <input type="text" id="student-id" placeholder="Your unique student ID" required>
+          <div class="error-message" id="student-error"></div>
+        </div>
+        <button type="submit" class="login-btn">Login as Student</button>
+        <a href="student-register.html" class="secondary-btn">New Student? Create Profile</a>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { showToast } from './js/toast.js';
+    import { getSupabase } from './js/supabase-init.js';
+    localStorage.clear();
+
+    function switchRole(role) {
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.role-btn[data-role='${role}']`).classList.add('active');
+      document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+      document.getElementById(role + '-form').classList.add('active');
+    }
+
+    document.querySelectorAll('.role-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchRole(btn.dataset.role));
+    });
+
+    // --- Teacher Login ---
+    document.getElementById('teacherLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('teacher-email').value;
+      const password = document.getElementById('teacher-password').value;
+      const errorDiv = document.getElementById('teacher-error');
+      errorDiv.style.display = 'none';
+
+      try {
+        const supabase = await getSupabase();
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+        if (authError) throw authError;
+
+        const { data: teacherData, error: profileError } = await supabase
+          .from('teachers')
+          .select('id, full_name')
+          .eq('id', authData.user.id)
+          .single();
+        if (profileError) throw new Error("Could not find teacher profile.");
+        
+        localStorage.setItem('userRole', 'teacher');
+        localStorage.setItem('teacherId', teacherData.id);
+        localStorage.setItem('teacherName', teacherData.full_name);
+
+        showToast(`Welcome, ${teacherData.full_name}!`, 'success');
+        setTimeout(() => window.location.href = 'teacher-dashboard.html', 1000);
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
+      }
+    });
+
+    // --- Student Login ---
+    document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const studentId = document.getElementById('student-id').value.trim();
+      const errorDiv = document.getElementById('student-error');
+      errorDiv.style.display = 'none';
+
+      if (!studentId) {
+        errorDiv.textContent = 'Please enter your Student ID.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase
+          .from('students')
+          .select('full_name')
+          .eq('roll_number', studentId)
+          .single();
+
+        if (error || !data) {
+          throw new Error('Student ID not found. Please create a profile first.');
         }
 
-        document.querySelectorAll('.role-btn').forEach(btn => {
-            btn.addEventListener('click', () => switchRole(btn.dataset.role));
-        });
+        localStorage.setItem('userRole', 'student');
+        localStorage.setItem('studentName', data.full_name);
+        localStorage.setItem('studentId', studentId);
 
-        // --- Teacher Login ---
-        document.getElementById('teacherLoginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('teacher-email').value;
-            const password = document.getElementById('teacher-password').value;
-            const errorDiv = document.getElementById('teacher-error');
-            errorDiv.style.display = 'none';
-
-            try {
-                const supabase = await getSupabase();
-                const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-                if (authError) throw authError;
-
-                const { data: teacherData, error: profileError } = await supabase
-                    .from('teachers')
-                    .select('id, full_name')
-                    .eq('id', authData.user.id)
-                    .single();
-                if (profileError) throw new Error("Could not find teacher profile.");
-                
-                localStorage.setItem('userRole', 'teacher');
-                localStorage.setItem('teacherId', teacherData.id);
-                localStorage.setItem('teacherName', teacherData.full_name);
-
-                showToast(`Welcome, ${teacherData.full_name}!`, 'success');
-                setTimeout(() => window.location.href = 'teacher-dashboard.html', 1000);
-            } catch (err) {
-                errorDiv.textContent = err.message;
-                errorDiv.style.display = 'block';
-            }
-        });
-
-        // --- Student Login ---
-        document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const studentId = document.getElementById('student-id').value.trim();
-            const errorDiv = document.getElementById('student-error');
-            errorDiv.style.display = 'none';
-
-            if (!studentId) {
-                errorDiv.textContent = 'Please enter your Student ID.';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            try {
-                const supabase = await getSupabase();
-                const { data, error } = await supabase
-                    .from('students')
-                    .select('full_name')
-                    .eq('roll_number', studentId)
-                    .single();
-
-                if (error || !data) {
-                    throw new Error('Student ID not found. Please create a profile first.');
-                }
-
-                localStorage.setItem('userRole', 'student');
-                localStorage.setItem('studentName', data.full_name);
-                localStorage.setItem('studentId', studentId);
-
-                showToast(`Welcome back, ${data.full_name}!`, 'success');
-                setTimeout(() => window.location.href = 'sindex.html', 1000);
-            } catch (err) {
-                errorDiv.textContent = err.message;
-                errorDiv.style.display = 'block';
-            }
-        });
-    </script>
+        showToast(`Welcome back, ${data.full_name}!`, 'success');
+        setTimeout(() => window.location.href = 'sindex.html', 1000);
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>

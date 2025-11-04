@@ -17,12 +17,25 @@
             --error: #e63946;
             --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); }
+
+        /* 🌆 Background added */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            background: linear-gradient(to bottom right, #e0f2f1, #ffffff);
+            background-image: url('assets/bg-pattern.svg'); /* optional image overlay */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
         .navbar {
             background: var(--card-bg);
             box-shadow: var(--shadow-light);
             padding: 1rem 2rem;
         }
+
         .nav-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -30,6 +43,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
         .nav-brand span {
             background-color: #e9ecef;
@@ -39,6 +53,7 @@
             font-size: 1rem;
             margin-left: 0.5rem;
         }
+
         .nav-link {
             background: transparent; color: var(--accent-primary);
             border: 1px solid var(--accent-primary);
@@ -46,10 +61,18 @@
             font-weight: 600; cursor: pointer; text-decoration: none;
             transition: all 0.3s ease;
         }
+
         .nav-link:hover { background: var(--accent-primary); color: white; }
-        .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
         .header { text-align: center; margin-bottom: 2rem; }
         .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
+
         .date-selector {
             background: var(--card-bg);
             padding: 1rem 1.5rem;
@@ -61,7 +84,9 @@
             justify-content: center;
             gap: 1rem;
         }
+
         .date-selector label { font-weight: 600; }
+
         #attendanceDate {
             font-size: 1rem;
             padding: 0.5rem 1rem;
@@ -69,6 +94,7 @@
             border-radius: 8px;
             background: #f8f9fa;
         }
+
         .student-list-container {
             background: var(--card-bg);
             border-radius: 15px;
@@ -76,10 +102,12 @@
             overflow: hidden;
             min-height: 150px;
         }
+
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
         th { background-color: #f8f9fa; font-weight: 600; color: #495057; }
         tr:last-child td { border-bottom: none; }
+
         .present-btn {
             background-color: var(--accent-primary);
             color: white;
@@ -90,7 +118,9 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
+
         .present-btn:hover { background-color: var(--accent-dark); transform: scale(1.05); }
+
         .present-btn:disabled {
             background-color: var(--success);
             cursor: default;
@@ -148,29 +178,18 @@
                 return;
             }
 
-            // Initialize UI
             document.getElementById('nav-class-code').textContent = activeClassCode;
             document.getElementById('back-link').href = `tindex.html?classCode=${activeClassCode}`;
             attendanceDateInput.value = new Date().toISOString().split('T')[0];
             
-            // Add event listeners
             attendanceDateInput.addEventListener('change', refreshAttendanceStatus);
             studentListBody.addEventListener('click', handleMarkPresentClick);
 
-            // *** THE CRITICAL FIX IS HERE ***
-            // We wait for the Supabase client to be ready and confirm the user session.
             try {
                 const supabase = await getSupabase();
-                // This ensures the auth token is loaded from localStorage before we query.
                 const { data: { session } } = await supabase.auth.getSession();
-                
-                if (!session) {
-                    throw new Error("You are not logged in. Redirecting to login page.");
-                }
-                
-                // Now that we've confirmed the session, it's safe to fetch data.
+                if (!session) throw new Error("You are not logged in. Redirecting to login page.");
                 await fetchClassRoster();
-
             } catch(error) {
                 showToast(error.message, 'error');
                 studentListBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 3rem; color: var(--error);">${error.message}</td></tr>`;
@@ -198,15 +217,12 @@
 
                 if (error) throw error;
                 
-                classRoster = data
-                    .filter(enrollment => enrollment.students)
-                    .map(enrollment => enrollment.students);
-                
+                classRoster = data.filter(e => e.students).map(e => e.students);
                 await refreshAttendanceStatus();
             } catch (error) {
                 console.error('Error fetching roster:', error);
                 showToast(`Error: ${error.message}`, 'error');
-                studentListBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 3rem; color: var(--error);">Could not load roster. Check console and RLS policies.</td></tr>`;
+                studentListBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 3rem; color: var(--error);">Could not load roster.</td></tr>`;
             }
         }
 

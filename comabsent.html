@@ -15,21 +15,75 @@
             --card-bg: #ffffff;
             --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating emoji background */
+        .emoji-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.08;
+            animation: float 20s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+            50% { transform: translateY(-30px) rotate(10deg); opacity: 0.2; }
+            100% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+        }
+
         .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
         .header { text-align: center; margin-bottom: 2rem; }
         .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: var(--card-bg); padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: var(--shadow-light); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(200, 35, 51, 0.15);
+        }
+
         .stat-number { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
         .stat-label { font-size: 1rem; color: #6c757d; }
-        .table-container { background: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow-light); overflow: hidden; }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+        }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
         th { background-color: #f8f9fa; font-weight: 600; }
     </style>
 </head>
 <body>
+    <!-- Floating Emoji Background -->
+    <div class="emoji-bg" id="emoji-bg"></div>
+
     <div class="container">
         <div class="header">
             <h1>Absent Students Report</h1>
@@ -57,14 +111,27 @@
             </table>
         </div>
     </div>
+
     <script type="module">
+        // 🎓👩‍🏫📉🗂❌ background emojis
+        const emojis = ["🎓", "👩‍🏫", "📉", "🗂", "❌", "📋"];
+        const container = document.getElementById("emoji-bg");
+        for (let i = 0; i < 20; i++) {
+            const emoji = document.createElement("div");
+            emoji.classList.add("emoji");
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.top = `${Math.random() * 100}%`;
+            emoji.style.animationDuration = `${15 + Math.random() * 10}s`;
+            container.appendChild(emoji);
+        }
+
         import { getSupabase } from './js/supabase-init.js';
         const supabase = await getSupabase();
 
         async function loadReport() {
-            // This logic is complex and would require fetching all students vs present students
-            // For now, this is a placeholder to show the UI
-            document.getElementById('absentTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">Absent report logic needs to be implemented.</td></tr>`;
+            document.getElementById('absentTableBody').innerHTML = `
+                <tr><td colspan="3" style="text-align:center; padding: 2rem;">Absent report logic needs to be implemented.</td></tr>`;
         }
         loadReport();
     </script>

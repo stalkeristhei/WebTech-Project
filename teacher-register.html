@@ -1,207 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Registration - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="./config.js"></script>
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --error: #e63946;
-            --success: #6a994e;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-        .register-container {
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            width: 100%;
-            max-width: 480px;
-            padding: 50px 40px;
-        }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-dark);
-            margin-bottom: 10px;
-        }
-        .header p { font-size: 1rem; color: #6c757d; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ced4da;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
-        }
-        .register-btn {
-            width: 100%;
-            background: var(--accent-dark);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-        .register-btn:hover {
-            background: var(--accent-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
-        }
-        .back-btn {
-            width: 100%;
-            background: transparent;
-            color: var(--accent-primary);
-            border: 1px solid var(--accent-primary);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-        }
-        .back-btn:hover { background: var(--accent-primary); color: white; }
-        .error-message, .success-message { font-size: 0.9rem; margin-top: 8px; display: none; }
-        .error-message { color: var(--error); }
-        .success-message { color: var(--success); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Registration - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="./config.js"></script>
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --error: #e63946;
+      --success: #6a994e;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      overflow: hidden;
+    }
+
+    /* Floating emoji background */
+    .floating-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 2.5rem;
+      opacity: 0.15;
+      animation: floatEmoji linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatEmoji {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .register-container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      width: 100%;
+      max-width: 480px;
+      padding: 50px 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+    }
+    .header p { font-size: 1rem; color: #6c757d; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ced4da;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+    }
+    .register-btn {
+      width: 100%;
+      background: var(--accent-dark);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+    .register-btn:hover {
+      background: var(--accent-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+    }
+    .back-btn {
+      width: 100%;
+      background: transparent;
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .back-btn:hover { background: var(--accent-primary); color: white; }
+    .error-message, .success-message { font-size: 0.9rem; margin-top: 8px; display: none; }
+    .error-message { color: var(--error); }
+    .success-message { color: var(--success); }
+  </style>
 </head>
 <body>
-    <div class="register-container">
-        <div class="header">
-            <h1>Create a Teacher Account</h1>
-            <p>Fill in the details below to get started.</p>
-        </div>
+  <div class="floating-bg" id="floating-bg"></div>
 
-        <form id="registerForm">
-            <div class="form-group">
-                <label for="teacher-fullname">Full Name</label>
-                <input type="text" id="teacher-fullname" placeholder="Enter your full name" required>
-                <div class="error-message" id="fullname-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="teacher-email">Email Address</label>
-                <input type="email" id="teacher-email" placeholder="e.g., teacher@school.edu" required>
-                <div class="error-message" id="email-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="school-name">School/Institution</label>
-                <input type="text" id="school-name" placeholder="Name of your institution" required>
-                <div class="error-message" id="school-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="teacher-password">Password</label>
-                <input type="password" id="teacher-password" placeholder="Create a strong password (min. 8 characters)" required>
-                <div class="error-message" id="password-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" placeholder="Confirm your password" required>
-                <div class="error-message" id="confirm-password-error"></div>
-            </div>
-            <button type="submit" class="register-btn">Create Account</button>
-            <div class="success-message" id="registration-success"></div>
-        </form>
-        <a href="login.html" class="back-btn">← Back to Login</a>
+  <div class="register-container">
+    <div class="header">
+      <h1>Create a Teacher Account</h1>
+      <p>Fill in the details below to get started.</p>
     </div>
 
-    <script type="module">
-        import { showToast } from './js/toast.js';
-        import { getSupabase } from './js/supabase-init.js';
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="teacher-fullname">Full Name</label>
+        <input type="text" id="teacher-fullname" placeholder="Enter your full name" required>
+        <div class="error-message" id="fullname-error"></div>
+      </div>
+      <div class="form-group">
+        <label for="teacher-email">Email Address</label>
+        <input type="email" id="teacher-email" placeholder="e.g., teacher@school.edu" required>
+        <div class="error-message" id="email-error"></div>
+      </div>
+      <div class="form-group">
+        <label for="school-name">School/Institution</label>
+        <input type="text" id="school-name" placeholder="Name of your institution" required>
+        <div class="error-message" id="school-error"></div>
+      </div>
+      <div class="form-group">
+        <label for="teacher-password">Password</label>
+        <input type="password" id="teacher-password" placeholder="Create a strong password (min. 8 characters)" required>
+        <div class="error-message" id="password-error"></div>
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+        <div class="error-message" id="confirm-password-error"></div>
+      </div>
+      <button type="submit" class="register-btn">Create Account</button>
+      <div class="success-message" id="registration-success"></div>
+    </form>
+    <a href="login.html" class="back-btn">← Back to Login</a>
+  </div>
 
-        async function handleTeacherRegistration(event) {
-            event.preventDefault();
-            clearErrorMessages();
-            const fullname = document.getElementById('teacher-fullname').value.trim();
-            const email = document.getElementById('teacher-email').value.trim();
-            const school = document.getElementById('school-name').value.trim();
-            const password = document.getElementById('teacher-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            // Basic validation
-            if (password !== confirmPassword) {
-                return showError('confirm-password-error', 'Passwords do not match');
-            }
-            if (password.length < 8) {
-                return showError('password-error', 'Password must be at least 8 characters');
-            }
+  <script type="module">
+    import { showToast } from './js/toast.js';
+    import { getSupabase } from './js/supabase-init.js';
 
-            const registerBtn = document.querySelector('.register-btn');
-            registerBtn.textContent = 'Creating Account...';
-            registerBtn.disabled = true;
+    async function handleTeacherRegistration(event) {
+      event.preventDefault();
+      clearErrorMessages();
+      const fullname = document.getElementById('teacher-fullname').value.trim();
+      const email = document.getElementById('teacher-email').value.trim();
+      const school = document.getElementById('school-name').value.trim();
+      const password = document.getElementById('teacher-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
 
-            try {
-                const supabase = await getSupabase();
-                
-                // 1. Create the authentication user
-                const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
-                if (authError) throw authError;
+      if (password !== confirmPassword)
+        return showError('confirm-password-error', 'Passwords do not match');
+      if (password.length < 8)
+        return showError('password-error', 'Password must be at least 8 characters');
 
-                // 2. *** NEW: Insert a public profile in the `teachers` table ***
-                // This links the auth user to a profile we can query
-                const { error: dbError } = await supabase
-                    .from('teachers')
-                    .insert({
-                        id: authData.user.id, // Use the ID from the newly created auth user
-                        full_name: fullname,
-                        email: email,
-                        school_name: school
-                    });
-                
-                if (dbError) throw dbError;
+      const registerBtn = document.querySelector('.register-btn');
+      registerBtn.textContent = 'Creating Account...';
+      registerBtn.disabled = true;
 
-                showSuccess('registration-success', 'Account created! Please check your email to verify and then log in.');
-                showToast('Account created successfully!', 'success');
-                document.getElementById('registerForm').reset();
-                setTimeout(() => window.location.href = 'login.html', 2500);
+      try {
+        const supabase = await getSupabase();
 
-            } catch (err) {
-                showError('email-error', err.message || 'Registration error.');
-                showToast(err.message || 'Registration error.', 'error');
-            }
-            
-            registerBtn.textContent = 'Create Teacher Account';
-            registerBtn.disabled = false;
-        }
-        
-        function clearErrorMessages() { /* ... unchanged ... */ }
-        function showError(elementId, message) { /* ... unchanged ... */ }
-        function showSuccess(elementId, message) { /* ... unchanged ... */ }
+        const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
+        if (authError) throw authError;
 
-        document.getElementById('registerForm').addEventListener('submit', handleTeacherRegistration);
-    </script>
+        const { error: dbError } = await supabase.from('teachers').insert({
+          id: authData.user.id,
+          full_name: fullname,
+          email: email,
+          school_name: school
+        });
+        if (dbError) throw dbError;
+
+        showSuccess('registration-success', 'Account created! Please check your email to verify and then log in.');
+        showToast('Account created successfully!', 'success');
+        document.getElementById('registerForm').reset();
+        setTimeout(() => window.location.href = 'login.html', 2500);
+
+      } catch (err) {
+        showError('email-error', err.message || 'Registration error.');
+        showToast(err.message || 'Registration error.', 'error');
+      }
+
+      registerBtn.textContent = 'Create Account';
+      registerBtn.disabled = false;
+    }
+
+    function clearErrorMessages() {
+      document.querySelectorAll('.error-message, .success-message').forEach(el => {
+        el.style.display = 'none';
+        el.textContent = '';
+      });
+    }
+
+    function showError(elementId, message) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.style.display = 'block';
+    }
+
+    function showSuccess(elementId, message) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.style.display = 'block';
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', handleTeacherRegistration);
+
+    // Floating Emoji Animation
+    const emojis = ["👩‍🏫","🎓","🏫","💻","📧","📝","📚"];
+    const container = document.getElementById("floating-bg");
+
+    for (let i = 0; i < 20; i++) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = 18 + Math.random() * 10 + "s";
+      emoji.style.fontSize = 1.8 + Math.random() * 2.2 + "rem";
+      emoji.style.animationDelay = Math.random() * 10 + "s";
+      container.appendChild(emoji);
+    }
+  </script>
 </body>
 </html>
