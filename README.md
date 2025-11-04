@@ -287,7 +287,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 | **Vansh Mayekar** | **Rohit Ghorpade** |
 |:---:|:---:|
 | 23CE174 | 23CE152 |
-| Frontend Development & UI/UX Design | Backend Integration & Database Design |
+| Frontend Development, Backend Integration & Database Design | Frontend Development & UI/UX Design |
 
 </div>
 
@@ -305,7 +305,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Discussions**: Use GitHub Discussions for questions and ideas
 
 ### Contact
-- **Email**: support@attendance-system.edu
+- **Email**: vanshbusiness04@gmail.com
 - **GitHub**: [@stalkeristhei](https://github.com/stalkeristhei)
 
 ---
