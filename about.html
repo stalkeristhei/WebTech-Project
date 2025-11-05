@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,11 @@
       --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -49,8 +54,13 @@
     }
 
     @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); }
-      100% { transform: translateY(-100px) rotate(360deg); }
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+      }
     }
 
     .container {
@@ -145,8 +155,27 @@
       font-size: 0.9rem;
       color: #6c757d;
     }
+
+    .team-card a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1a0dab;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .team-card a img {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      display: inline-block;
+      filter: invert(0);
+      border: none;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Floating Emoji Background -->
@@ -161,18 +190,29 @@
 
   <div class="container">
     <h1>About the Project</h1>
-    <p>This Smart Attendance Management System was built to provide a modern, real-time solution for educational institutions, focusing on automation, analytics, and simplicity.</p>
+    <p>This Smart Attendance Management System was built to provide a modern, real-time solution for educational
+      institutions, focusing on automation, analytics, and simplicity.</p>
 
     <div class="team-grid">
       <div class="team-card">
         <img src="vansh.jpg" alt="Vansh Mayekar">
         <h3>Vansh Mayekar</h3>
         <span>23CE174</span>
+        <br>
+        <a href="https://github.com/stalkeristhei" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+          View on GitHub
+        </a>
       </div>
       <div class="team-card">
         <img src="rohit.jpg" alt="Rohit Ghorpade">
         <h3>Rohit Ghorpade</h3>
         <span>23CE152</span>
+        <br>
+        <a href="https://github.com/RohGhor" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+          View on GitHub
+        </a>
       </div>
     </div>
 
@@ -181,7 +221,7 @@
     </div>
   </div>
 
-   <footer>
+  <footer>
     © 2025 A Web Technology Project by Vansh Mayekar & Rohit Ghorpade
   </footer>
 
@@ -195,4 +235,5 @@
     });
   </script>
 </body>
+
 </html>
