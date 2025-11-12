@@ -138,11 +138,12 @@
         const attendanceDateInput = document.getElementById('attendanceDate');
         
         const activeClassCode = localStorage.getItem('activeClassCode');
+        const activeClassId = localStorage.getItem('activeClassId');
         let classRoster = [];
         let markedStudents = new Set();
 
         document.addEventListener('DOMContentLoaded', async () => {
-            if (!activeClassCode) {
+            if (!activeClassCode || !activeClassId) {
                 alert("No active class selected. Redirecting.");
                 window.location.href = 'manage-class.html';
                 return;
@@ -218,7 +219,8 @@
                     .from('student_log')
                     .select('"Roll Number"')
                     .eq('Date', selectedDate)
-                    .eq('Status', 'Present');
+                    .eq('Status', 'Present')
+                    .eq('class_id', activeClassId); // Filter by class to avoid showing students marked in other classes
                 
                 if (error) throw error;
                 markedStudents = new Set(data.map(s => s['Roll Number']));
@@ -268,7 +270,8 @@
                     'Roll Number': roll,
                     'Name': name,
                     'Date': selectedDate,
-                    'Status': 'Present'
+                    'Status': 'Present',
+                    'class_id': activeClassId // Add class_id to track which class this attendance is for
                 });
 
                 if (error) throw error;

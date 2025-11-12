@@ -99,12 +99,19 @@
                 return;
             }
             
-            // Note: This logic shows the student's *overall* summary across all classes.
-            // A more advanced version would filter by classId.
+            if (!activeClassId) {
+                alert("Could not find class ID. Please go back and select a class.");
+                window.location.href = 'sindex.html';
+                return;
+            }
+            
+            // Filter attendance records by BOTH student ID AND class ID
+            // This ensures we only show attendance for THIS specific class
             const { data, error } = await supabase
                 .from('student_log')
                 .select('Date, Status')
                 .eq('"Roll Number"', studentId)
+                .eq('class_id', activeClassId) // Only show attendance for the active class
                 .order('Date', { ascending: false });
             
             if (error) {

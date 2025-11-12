@@ -143,18 +143,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Get the class code from the URL parameter
+            // Get the class code and class ID from the URL parameters
             const params = new URLSearchParams(window.location.search);
             const classCode = params.get('classCode');
+            const classId = params.get('classId');
 
-            if (!classCode) {
+            if (!classCode || !classId) {
                 alert('No class selected. Redirecting to your class list.');
                 window.location.href = 'manage-class.html';
                 return;
             }
 
-            // Store the classCode in localStorage so other pages can use it
+            // Store both classCode and classId in localStorage so other pages can use them
             localStorage.setItem('activeClassCode', classCode);
+            localStorage.setItem('activeClassId', classId);
 
             // Update the UI
             document.getElementById('class-code-display').textContent = classCode;

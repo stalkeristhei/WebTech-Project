@@ -61,10 +61,70 @@
         import { getSupabase } from './js/supabase-init.js';
         const supabase = await getSupabase();
 
+        // Get the active class ID from localStorage
+        const activeClassId = localStorage.getItem('activeClassId');
+        const activeClassCode = localStorage.getItem('activeClassCode');
+
         async function loadReport() {
-            // This logic is complex and would require fetching all students vs present students
-            // For now, this is a placeholder to show the UI
-            document.getElementById('absentTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">Absent report logic needs to be implemented.</td></tr>`;
+            if (!activeClassId) {
+                alert("No active class selected. Redirecting.");
+                window.location.href = 'manage-class.html';
+                return;
+            }
+            
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Get all students enrolled in this class
+                const { data: allStudents, error: allErr } = await supabase
+                    .from('enrollments')
+                    .select('students(roll_number, full_name)')
+                    .eq('class_id', activeClassId);
+                if (allErr) throw allErr;
+
+                // Get which students were present today in THIS class
+                const { data: presentStudents, error: presentErr } = await supabase
+                    .from('student_log')
+                    .select('"Roll Number"')
+                    .eq('Date', today)
+                    .eq('Status', 'Present')
+                    .eq('class_id', activeClassId); // Filter by class
+                if (presentErr) throw presentErr;
+
+                const presentRolls = new Set(presentStudents.map(s => s['Roll Number']));
+                const absentStudents = allStudents.filter(enrollment => 
+                    enrollment.students && !presentRolls.has(enrollment.students.roll_number)
+                );
+                
+                const totalStudents = allStudents.length;
+                const absentCount = absentStudents.length;
+                const absenteeRate = totalStudents > 0 ? ((absentCount / totalStudents) * 100).toFixed(1) : 0;
+                
+                document.getElementById('total-absent').textContent = absentCount;
+                document.getElementById('absentee-rate').textContent = `${absenteeRate}%`;
+                
+                const tableBody = document.getElementById('absentTableBody');
+                tableBody.innerHTML = '';
+                
+                if (absentStudents.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">Great news! Everyone is present today.</td></tr>`;
+                    return;
+                }
+
+                absentStudents.forEach(enrollment => {
+                    const student = enrollment.students;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.roll_number}</td>
+                        <td>${student.full_name}</td>
+                        <td>N/A</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('absentTableBody').innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem;">Error loading absent report.</td></tr>`;
+            }
         }
         loadReport();
     </script>

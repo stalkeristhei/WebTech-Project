@@ -61,16 +61,40 @@
         import { getSupabase } from './js/supabase-init.js';
         const supabase = await getSupabase();
         
-        // In a real app, you would pass the class_id here, perhaps via URL param
-        // For now, it shows all present students for simplicity
+        // Get the active class ID from localStorage
+        const activeClassId = localStorage.getItem('activeClassId');
+        const activeClassCode = localStorage.getItem('activeClassCode');
+        
         async function loadReport() {
-            const { data, error } = await supabase.from('student_log').select('*').eq('Status', 'Present').eq('Date', new Date().toISOString().split('T')[0]);
+            if (!activeClassId) {
+                alert("No active class selected. Redirecting.");
+                window.location.href = 'manage-class.html';
+                return;
+            }
             
-            if (error) return;
+            // Filter by class_id to show only students present in THIS class
+            const { data, error } = await supabase
+                .from('student_log')
+                .select('*')
+                .eq('Status', 'Present')
+                .eq('Date', new Date().toISOString().split('T')[0])
+                .eq('class_id', activeClassId); // Only show attendance for the active class
+            
+            if (error) {
+                console.error(error);
+                return;
+            }
 
             document.getElementById('total-present').textContent = data.length;
             
             const tableBody = document.getElementById('presentTableBody');
+            tableBody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">No students marked present today.</td></tr>`;
+                return;
+            }
+            
             data.forEach(s => {
                 const row = document.createElement('tr');
                 const time = new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

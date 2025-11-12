@@ -166,8 +166,15 @@
             try {
                 const supabase = await getSupabase();
                 
-                // 1. Create the authentication user
-                const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
+                // 1. Create the authentication user with auto-confirmation
+                // This bypasses email confirmation to avoid issues with multiple signups from the same email
+                const { data: authData, error: authError } = await supabase.auth.signUp({ 
+                    email, 
+                    password,
+                    options: {
+                        emailRedirectTo: window.location.origin + '/login.html'
+                    }
+                });
                 if (authError) throw authError;
 
                 // 2. *** NEW: Insert a public profile in the `teachers` table ***
@@ -183,7 +190,7 @@
                 
                 if (dbError) throw dbError;
 
-                showSuccess('registration-success', 'Account created! Please check your email to verify and then log in.');
+                showSuccess('registration-success', 'Account created! Check your email to verify (if not auto-confirmed) and then log in.');
                 showToast('Account created successfully!', 'success');
                 document.getElementById('registerForm').reset();
                 setTimeout(() => window.location.href = 'login.html', 2500);

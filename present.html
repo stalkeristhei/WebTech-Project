@@ -92,13 +92,13 @@
             const tableBody = document.getElementById('presentTableBody');
             tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem;">Loading...</td></tr>`;
 
-            // Note: In a larger app, you would also filter the student_log by class ID
-            // For now, this shows all present students on a given day, which works for viewing.
+            // Filter by both date and class_id to show only students present in THIS class
             const { data, error } = await supabase
                 .from('student_log')
                 .select(`"Roll Number", "Name", created_at`)
                 .eq('Date', selectedDate)
-                .eq('Status', 'Present');
+                .eq('Status', 'Present')
+                .eq('class_id', activeClassId); // Only show attendance for this specific class
 
             tableBody.innerHTML = '';
             if (error || data.length === 0) {

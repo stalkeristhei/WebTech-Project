@@ -157,7 +157,7 @@
                             <div class="class-detail"><span>Academic Year:</span> <strong>${cls.academic_year}</strong></div>
                         </div>
                         <div>
-                            <a href="tindex.html?classCode=${cls.class_code}" class="btn-action btn-manage">Manage Attendance</a>
+                            <a href="tindex.html?classCode=${cls.class_code}&classId=${cls.id}" class="btn-action btn-manage">Manage Attendance</a>
                             <div class="actions">
                                 <button class="btn-action btn-copy" onclick="copyCode('${cls.class_code}')">📋 Copy Code</button>
                                 <button class="btn-action btn-delete" onclick="deleteClass('${cls.id}')">🗑️ Delete</button>
