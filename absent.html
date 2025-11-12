@@ -8,48 +8,128 @@
     <script src="./config.js"></script>
     <style>
         :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
+            --bg-primary: #fdfaf6;
+            --text-primary: #1e1e1e;
             --accent-primary: #e63946;
             --accent-dark: #c82333;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+            --card-bg: #ffffffd9;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.08;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         .header { text-align: center; margin-bottom: 2rem; }
         .header h1 { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
         .header p { font-size: 1.1rem; color: #6c757d; }
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;}
-        .date-filter { background: var(--card-bg); padding: 0.5rem; border-radius: 10px; box-shadow: var(--shadow-light); }
-        .date-filter input { font-size: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 8px; }
-        .nav-btn {
-            background: var(--accent-dark); color: white; padding: 0.75rem 1.5rem;
-            border-radius: 50px; text-decoration: none; font-weight: 600; transition: background-color 0.2s;
+
+        .controls {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
         }
+
+        .date-filter {
+            background: var(--card-bg);
+            padding: 0.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-light);
+        }
+
+        .date-filter input {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .nav-btn {
+            background: var(--accent-dark);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
         .nav-btn:hover { background: #b21f2d; }
-        .table-container { background: var(--card-bg); border-radius: 15px; box-shadow: var(--shadow-light); overflow: hidden; }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+        }
+
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid #e9ecef; }
         th { background-color: #f8f9fa; font-weight: 600; }
         .status-badge {
-            background-color: #f8d7da; color: #721c24;
-            padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element" style="left: 10%; font-size: 2rem;">❌</div>
+        <div class="floating-element" style="left: 20%; font-size: 1.5rem; animation-delay: -5s;">📅</div>
+        <div class="floating-element" style="left: 30%; font-size: 2.5rem; animation-delay: -10s;">📋</div>
+        <div class="floating-element" style="left: 40%; font-size: 1.8rem; animation-delay: -15s;">👩‍🏫</div>
+        <div class="floating-element" style="left: 50%; font-size: 2rem; animation-delay: -20s;">💢</div>
+        <div class="floating-element" style="left: 60%; font-size: 1.5rem; animation-delay: -25s;">📘</div>
+        <div class="floating-element" style="left: 70%; font-size: 2.2rem; animation-delay: -30s;">🕒</div>
+        <div class="floating-element" style="left: 80%; font-size: 1.7rem; animation-delay: -35s;">🧑‍🎓</div>
+        <div class="floating-element" style="left: 90%; font-size: 2rem; animation-delay: -40s;">🚫</div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>❌ Absent List</h1>
             <p>Students not marked present on the selected date.</p>
         </div>
+
         <div class="controls">
             <div class="date-filter">
                 <input type="date" id="dateFilter">
             </div>
             <a id="back-link" href="#" class="nav-btn">← Back to Class Dashboard</a>
         </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -60,44 +140,40 @@
                     </tr>
                 </thead>
                 <tbody id="absentTableBody">
-                     <tr><td colspan="3" style="text-align: center; padding: 2rem;">Loading...</td></tr>
+                    <tr><td colspan="3" style="text-align: center; padding: 2rem;">Loading...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
+
     <script type="module">
         import { getSupabase } from './js/supabase-init.js';
         const supabase = await getSupabase();
 
-        // ** THE FIX IS HERE **
         const activeClassId = localStorage.getItem('activeClassId');
         const activeClassCode = localStorage.getItem('activeClassCode');
-        
         const dateFilter = document.getElementById('dateFilter');
         dateFilter.value = new Date().toISOString().split('T')[0];
-
-        // Set the back link dynamically
         document.getElementById('back-link').href = `class-view.html?classId=${activeClassId}&classCode=${activeClassCode}`;
 
         async function fetchAbsentStudents() {
             if (!activeClassId) {
-                 alert("Could not find class ID. Please go back and select a class.");
-                 window.location.href = 'sindex.html';
-                 return;
+                alert("Could not find class ID. Please go back and select a class.");
+                window.location.href = 'sindex.html';
+                return;
             }
+
             const selectedDate = dateFilter.value;
             const tableBody = document.getElementById('absentTableBody');
             tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">Loading...</td></tr>`;
 
             try {
-                // Get all students enrolled in this specific class
                 const { data: allStudents, error: allErr } = await supabase
                     .from('enrollments')
                     .select('students(roll_number, full_name)')
                     .eq('class_id', activeClassId);
                 if (allErr) throw allErr;
 
-                // Get which students were present on that day
                 const { data: presentStudents, error: presentErr } = await supabase
                     .from('student_log')
                     .select('"Roll Number"')
@@ -107,11 +183,11 @@
 
                 const presentRolls = new Set(presentStudents.map(s => s['Roll Number']));
                 const absentStudents = allStudents.filter(enrollment => !presentRolls.has(enrollment.students.roll_number));
-                
+
                 tableBody.innerHTML = '';
                 if (absentStudents.length === 0) {
-                     tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">Great news! Everyone was present on this day.</td></tr>`;
-                     return;
+                    tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">🎉 Great news! Everyone was present on this day.</td></tr>`;
+                    return;
                 }
 
                 absentStudents.forEach(enrollment => {
@@ -125,10 +201,11 @@
                     tableBody.appendChild(row);
                 });
             } catch (err) {
-                tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">Error loading absent list.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 2rem;">⚠️ Error loading absent list.</td></tr>`;
                 console.error(err);
             }
         }
+
         dateFilter.addEventListener('change', fetchAbsentStudents);
         fetchAbsentStudents();
     </script>

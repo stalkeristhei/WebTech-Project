@@ -15,7 +15,33 @@
             --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
             --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
         }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating emoji background */
+        .emoji-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .emoji {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+            50% { transform: translateY(-30px) rotate(10deg); opacity: 0.25; }
+            100% { transform: translateY(0) rotate(0deg); opacity: 0.15; }
+        }
+
         .navbar {
             background: var(--card-bg);
             box-shadow: var(--shadow-light);
@@ -37,6 +63,7 @@
             transition: all 0.3s ease;
         }
         .logout-btn:hover { background: var(--accent-primary); color: white; }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -58,6 +85,7 @@
             display: inline-block;
         }
         .header p { font-size: 1.2rem; color: #6c757d; margin-bottom: 3rem; }
+
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -73,9 +101,18 @@
             transition: all 0.3s ease;
             border-top: 4px solid var(--accent-primary);
         }
-        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-medium); }
-        .card .icon { font-size: 3.5rem; display: block; margin-bottom: 1.5rem; color: var(--accent-primary); }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+        }
+        .card .icon {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+        }
         .card-title { font-size: 1.5rem; font-weight: 600; }
+
         .back-link {
             display: inline-block;
             margin-top: 3rem;
@@ -87,17 +124,22 @@
     </style>
 </head>
 <body>
+    <!-- Background -->
+    <div class="emoji-bg" id="emoji-bg"></div>
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">👨‍🎓 Class Dashboard</div>
             <a href="login.html" class="logout-btn">Log Out</a>
         </div>
     </nav>
+
     <div class="container">
         <div class="header">
             <h1>Class: <span id="class-code-display">...</span></h1>
             <p>View attendance reports for this class.</p>
         </div>
+
         <div class="card-container">
             <a href="present.html" class="card">
                 <span class="icon">✅</span>
@@ -112,10 +154,24 @@
                 <div class="card-title">My Summary</div>
             </a>
         </div>
+
         <a href="sindex.html" class="back-link">← Back to All Classes</a>
     </div>
 
     <script>
+        // Floating emoji generation 🎓📚🏫🧑‍🏫🗂✅
+        const emojis = ["🎓", "📚", "🏫", "🧑‍🏫", "🗂", "✅"];
+        const container = document.getElementById("emoji-bg");
+        for (let i = 0; i < 20; i++) {
+            const emoji = document.createElement("div");
+            emoji.classList.add("emoji");
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.top = `${Math.random() * 100}%`;
+            emoji.style.animationDuration = `${15 + Math.random() * 10}s`;
+            container.appendChild(emoji);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const classId = params.get('classId');
@@ -127,11 +183,8 @@
                 return;
             }
 
-            // ** THE FIX IS HERE **
-            // We set the *active* class in localStorage so the report pages know which one to use.
             localStorage.setItem('activeClassId', classId);
             localStorage.setItem('activeClassCode', classCode);
-
             document.getElementById('class-code-display').textContent = classCode;
         });
     </script>

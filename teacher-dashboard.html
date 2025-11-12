@@ -1,123 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --accent-dark: #21867a;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-            --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-        .navbar {
-            background: var(--card-bg);
-            box-shadow: var(--shadow-light);
-            padding: 1rem 2rem;
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
-        .logout-btn {
-            background: transparent; color: var(--accent-primary);
-            border: 1px solid var(--accent-primary);
-            padding: 0.5rem 1.25rem; border-radius: 50px;
-            font-weight: 600; cursor: pointer; text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .logout-btn:hover { background: var(--accent-primary); color: white; }
-        .dashboard-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--accent-dark);
-            margin-bottom: 10px;
-        }
-        .header p { font-size: 1.2rem; color: #6c757d; margin-bottom: 3rem; }
-        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .option-card {
-            background: var(--card-bg);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-light);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            border-top: 4px solid var(--accent-primary);
-        }
-        .option-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-medium);
-        }
-        .option-card .icon {
-            font-size: 3.5rem; display: block;
-            margin-bottom: 20px; color: var(--accent-primary);
-        }
-        .option-card h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
-        .option-card p { font-size: 1rem; color: #6c757d; line-height: 1.6; }
-        @media (max-width: 768px) {
-            .option-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 2.2rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #f8f9fa;
+      --text-primary: #212529;
+      --accent-primary: #2a9d8f;
+      --accent-dark: #21867a;
+      --card-bg: #ffffff;
+      --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
+      --shadow-medium: 0 10px 30px rgba(42, 157, 143, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Floating Emoji Background */
+    .floating-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .emoji {
+      position: absolute;
+      font-size: 2.5rem;
+      opacity: 0.15;
+      animation: floatEmoji linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatEmoji {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .navbar {
+      background: var(--card-bg);
+      box-shadow: var(--shadow-light);
+      padding: 1rem 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand { font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); }
+
+    .logout-btn {
+      background: transparent;
+      color: var(--accent-primary);
+      border: 1px solid var(--accent-primary);
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .dashboard-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #6c757d;
+      margin-bottom: 3rem;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .option-card {
+      background: var(--card-bg);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--accent-primary);
+    }
+
+    .option-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    .option-card .icon {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 20px;
+      color: var(--accent-primary);
+    }
+
+    .option-card h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .option-card p {
+      font-size: 1rem;
+      color: #6c757d;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .option-grid { grid-template-columns: 1fr; }
+      .header h1 { font-size: 2.2rem; }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">👨‍🏫 Teacher Portal</div>
-            <a href="login.html" class="logout-btn">Log Out</a>
-        </div>
-    </nav>
-    <div class="dashboard-container">
-        <div class="header">
-            <h1 id="welcome-message">Welcome!</h1>
-            <p>What would you like to do today?</p>
-        </div>
-        <div class="option-grid">
-            <a href="manage-class.html" class="option-card">
-                <span class="icon">📚</span>
-                <h2>Manage Classes</h2>
-                <p>View, edit, or take attendance for your saved courses.</p>
-            </a>
-            <a href="create-class.html" class="option-card">
-                <span class="icon">➕</span>
-                <h2>Create New Class</h2>
-                <p>Set up a new course and generate a unique student code.</p>
-            </a>
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const teacherName = localStorage.getItem('teacherName');
-            if (teacherName) {
-                document.getElementById('welcome-message').textContent = `Welcome, ${teacherName}!`;
-            } else {
-                // If no user info, redirect to login
-                window.location.href = 'login.html';
-            }
-        });
-    </script>
+  <div class="floating-bg" id="floating-bg"></div>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">👨‍🏫 Teacher Portal</div>
+      <a href="login.html" class="logout-btn">Log Out</a>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <div class="header">
+      <h1 id="welcome-message">Welcome!</h1>
+      <p>What would you like to do today?</p>
+    </div>
+    <div class="option-grid">
+      <a href="manage-class.html" class="option-card">
+        <span class="icon">📚</span>
+        <h2>Manage Classes</h2>
+        <p>View, edit, or take attendance for your saved courses.</p>
+      </a>
+      <a href="create-class.html" class="option-card">
+        <span class="icon">➕</span>
+        <h2>Create New Class</h2>
+        <p>Set up a new course and generate a unique student code.</p>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Floating Emoji Generator
+    const emojis = ["👨‍🏫","📚","🧮","🏫","🗂️","🧾"];
+    const container = document.getElementById("floating-bg");
+
+    for (let i = 0; i < 25; i++) {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + "vw";
+      emoji.style.animationDuration = 15 + Math.random() * 10 + "s";
+      emoji.style.fontSize = 1.5 + Math.random() * 2.5 + "rem";
+      emoji.style.animationDelay = Math.random() * 10 + "s";
+      container.appendChild(emoji);
+    }
+
+    // Welcome message personalization
+    document.addEventListener('DOMContentLoaded', () => {
+      const teacherName = localStorage.getItem('teacherName');
+      if (teacherName) {
+        document.getElementById('welcome-message').textContent = `Welcome, ${teacherName}!`;
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+
 </body>
 </html>

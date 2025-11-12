@@ -1,52 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Smart Attendance System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #f8f9fa;
-            --text-primary: #212529;
-            --accent-primary: #2a9d8f;
-            --card-bg: #ffffff;
-            --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.07);
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); line-height: 1.7; }
-        .container { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center; }
-        h1 { font-size: 2.8rem; color: var(--accent-primary); margin-bottom: 1rem; }
-        p { font-size: 1.1rem; color: #6c757d; margin-bottom: 3rem; }
-        .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .team-card { background: var(--card-bg); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow-light); }
-        .team-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; }
-        .team-card h3 { font-size: 1.25rem; margin-bottom: 0.25rem; }
-        .team-card span { color: #6c757d; }
-        .nav-home {
-            display: inline-block; margin-top: 3rem; background: var(--accent-primary);
-            color: white; padding: 0.75rem 2rem; border-radius: 50px;
-            text-decoration: none; font-weight: 600; transition: background-color 0.2s;
-        }
-        .nav-home:hover { background: #21867a; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Smart Attendance System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #fdfaf6;
+      --bg-secondary: #f8f5f0;
+      --text-primary: #1e1e1e;
+      --text-secondary: #5c4b42;
+      --accent-primary: #2a9d8f;
+      --accent-secondary: #21867a;
+      --card-bg: #ffffffd9;
+      --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+      --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.12);
+      --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.15);
+      --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Floating emoji background */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .floating-element {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .team-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: var(--shadow-light);
+      transition: all 0.3s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .team-card img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 3px solid var(--accent-primary);
+    }
+
+    .team-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .team-card span {
+      color: var(--text-secondary);
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+
+    .nav-home {
+      display: inline-block;
+      background: var(--gradient-primary);
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: var(--shadow-light);
+      transition: all 0.3s ease;
+    }
+
+    .nav-home:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-medium);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 5rem;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .team-card a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1a0dab;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .team-card a img {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      display: inline-block;
+      filter: invert(0);
+      border: none;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>About the Project</h1>
-        <p>This Smart Attendance Management System was built to provide a modern, real-time solution for educational institutions.</p>
-        <div class="team-grid">
-            <div class="team-card">
-                <img src="vansh.jpg" alt="Vansh Mayekar">
-                <h3>Vansh Mayekar</h3>
-                <span>23CE174</span>
-            </div>
-            <div class="team-card">
-                <img src="rohit.jpg" alt="Rohit Ghorpade">
-                <h3>Rohit Ghorpade</h3>
-                <span>23CE152</span>
-            </div>
-        </div>
-        <a href="index.html" class="nav-home">← Back to Home</a>
+
+  <!-- Floating Emoji Background -->
+  <div class="floating-elements">
+    <div class="floating-element" style="left: 10%; font-size: 2rem;">📚</div>
+    <div class="floating-element" style="left: 25%; font-size: 1.5rem; animation-delay: -5s;">✅</div>
+    <div class="floating-element" style="left: 40%; font-size: 2.5rem; animation-delay: -10s;">👨‍🏫</div>
+    <div class="floating-element" style="left: 55%; font-size: 1.8rem; animation-delay: -15s;">📊</div>
+    <div class="floating-element" style="left: 70%; font-size: 2rem; animation-delay: -20s;">👨‍🎓</div>
+    <div class="floating-element" style="left: 85%; font-size: 1.7rem; animation-delay: -25s;">📝</div>
+  </div>
+
+  <div class="container">
+    <h1>About the Project</h1>
+    <p>This Smart Attendance Management System was built to provide a modern, real-time solution for educational
+      institutions, focusing on automation, analytics, and simplicity.</p>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="vansh.jpg" alt="Vansh Mayekar">
+        <h3>Vansh Mayekar</h3>
+        <span>23CE174</span>
+        <br>
+        <a href="https://github.com/stalkeristhei" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+          View on GitHub
+        </a>
+      </div>
+      <div class="team-card">
+        <img src="rohit.jpg" alt="Rohit Ghorpade">
+        <h3>Rohit Ghorpade</h3>
+        <span>23CE152</span>
+        <br>
+        <a href="https://github.com/RohGhor" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+          View on GitHub
+        </a>
+      </div>
     </div>
+
+    <div class="button-group">
+      <a href="index.html" class="nav-home">← Back to Home</a>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 A Web Technology Project by Vansh Mayekar & Rohit Ghorpade
+  </footer>
+
+  <script>
+    // Soft entry animation for content
+    gsap.from(".container", {
+      opacity: 0,
+      y: 30,
+      duration: 1.2,
+      ease: "power2.out"
+    });
+  </script>
 </body>
+
 </html>
